@@ -111,40 +111,36 @@ floating-point loss.
 Install the optional AWS SDK dependency:
 
 ```bash
-python -m pip install "axonllm-ledger[quick]"
+python -m pip install -e ".[quick]"
 ```
 
-Then import a versioned asset bundle:
+Generate the dashboard-ready sample tables:
 
-```python
-from axonllm_ledger.quick_dashboard import (
-    QuickAssetBundleImportConfig,
-    QuickDashboardProvisioner,
-)
-
-provisioner = QuickDashboardProvisioner.from_boto3(region_name="us-east-1")
-config = QuickAssetBundleImportConfig(
-    aws_account_id="123456789012",
-    job_id="axonllm-ledger-dashboard-v1",
-    override_parameters={
-        "ResourceIdOverrideConfiguration": {
-            "PrefixForAllResources": "axonllm-ledger-"
-        }
-    },
-)
-
-provisioner.start_import_from_s3(
-    "s3://my-dashboard-artifacts/axonllm-ledger.qs",
-    config,
-)
-status = provisioner.wait_for_import(config)
-if not status.succeeded:
-    raise RuntimeError(status.errors)
+```bash
+PYTHONPATH=src python examples/run_sample_pipeline.py
 ```
 
-The SDK uses the standard AWS credential chain and does not accept or persist
-plaintext credentials. See [the Quick dashboard guide](dashboards/quick/README.md)
-for the planned sheets and asset-bundle workflow.
+Then deploy the six-sheet dashboard in the Quick account's identity region:
+
+```bash
+axonllm-ledger-dashboard --region us-east-1
+```
+
+The command is idempotent. It creates or updates:
+
+- one encrypted, versioned, private S3 bucket for the dashboard tables;
+- an exact-prefix bucket policy for the account's existing Quick service role;
+- four S3 data sources and four SPICE datasets;
+- the AxonLLM Ledger dashboard with 6 sheets and 28 visuals.
+
+The dashboard definition is stored in
+`axonllm_ledger.quick_dashboard_definition`, so visuals and layouts are reviewed
+and versioned with the code. The deployer uses the standard AWS credential
+chain and does not accept or persist plaintext credentials.
+
+Use `--dataset-json` to deploy a production Quick table export instead of the
+sample file. See [the Quick dashboard guide](dashboards/quick/README.md) for
+the resource model, sheet inventory, and optional asset-bundle export workflow.
 
 ## Current data-format boundary
 
@@ -158,8 +154,9 @@ planned milestone.
 
 - The core pipeline uses in-memory collections; production persistence is not implemented.
 - S3 listing and object-loading hooks are stubs intended for an AWS adapter.
-- The repository defines and provisions Quick assets, but the production `.qs`
-  bundle must be authored and exported from a reviewed Quick environment.
+- The repository creates the complete Quick dashboard directly through the
+  API. A `.qs` asset bundle can be exported after review for immutable
+  cross-account promotion.
 - Looker remains possible through the generic `DeliveryTarget` protocol, but
   Amazon Quick is the primary dashboard target.
 

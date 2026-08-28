@@ -1,20 +1,20 @@
 # Amazon Quick dashboard
 
-AxonLLM Ledger uses Amazon Quick's Quick Sight APIs to deploy dashboards as
-versioned asset bundles. Asset bundles are preferable to creating every visual
-through individual API calls because they preserve the reviewed analysis,
-datasets, calculated fields, themes, and dashboard dependencies as one release
-artifact.
+AxonLLM Ledger includes a complete, version-controlled Amazon Quick dashboard.
+The Python deployer creates the S3 data layer, SPICE datasets, and dashboard
+definition directly through the Quick Sight APIs. After review, the deployed
+dashboard can also be exported as a `.qs` asset bundle for immutable
+cross-account promotion.
 
-## Proposed sheets
+## Dashboard sheets
 
 ### 1. Executive overview
 
 - Total billed AI spend
-- Forecast versus budget
-- Accounts over budget
-- Estimated optimization opportunity
-- Spend trend by day or month
+- Total invocation volume
+- Potential optimization savings
+- Spend trend and account allocation
+- Budget limit, actual spend, and forecast
 
 ### 2. Model economics
 
@@ -47,10 +47,10 @@ artifact.
 
 ### 6. Data quality
 
-- Last ingestion time
-- Missing-period alerts
-- Deduplicated record count
-- CUR-to-budget reconciliation discrepancy
+- Cost aggregation row count
+- User-to-model access relationship count
+- Budget and optimization record counts
+- Period and dimension coverage table
 
 ## Dataset contract
 
@@ -63,15 +63,42 @@ The Python API in `axonllm_ledger.quick_dataset` produces:
 | `budgets` | Budget limits, forecasts, actual spend, and exceeded state |
 | `optimization_recommendations` | Cost Optimization Hub recommendations |
 
-Publish these tables to a queryable Athena layer before refreshing the Quick
-datasets. Parquet is preferred for production because it reduces scan cost and
-preserves explicit column types.
+The included deployer publishes these tables as private CSV objects and imports
+them into SPICE. Production deployments can continue to generate the same
+contract while replacing the sample export with recurring pipeline output.
 
-## Asset-bundle workflow
+## Direct deployment
+
+From the repository root:
+
+```bash
+python -m pip install -e ".[quick]"
+PYTHONPATH=src python examples/run_sample_pipeline.py
+axonllm-ledger-dashboard --region us-east-1
+```
+
+By default, the command discovers the current AWS account and the single active
+Quick admin or author in the `default` namespace. Use `--aws-account-id`,
+`--principal-arn`, `--profile`, or `--bucket` to override discovery.
+
+The deployment creates or updates:
+
+1. `axonllm-ledger-dashboard-ACCOUNT-REGION`, with public access blocked,
+   S3-managed encryption, versioning, and project tags.
+2. An exact-prefix bucket policy for the account's existing Quick S3 consumer
+   or service role. The deployer does not alter that role's trust policy.
+3. Four S3 data sources and four SPICE datasets.
+4. The `axonllm-ledger` dashboard with strict definition validation.
+
+The direct definition is implemented in
+`src/axonllm_ledger/quick_dashboard_definition.py`. Deployment orchestration is
+implemented in `src/axonllm_ledger/quick_dashboard_deploy.py`.
+
+## Asset-bundle promotion workflow
 
 1. Create the Athena data source and Ledger datasets in an isolated authoring account.
-2. Build and review the analysis using the sheets above.
-3. Publish the analysis as the AxonLLM Ledger dashboard.
+2. Deploy and review the version-controlled dashboard definition.
+3. Publish the reviewed AxonLLM Ledger dashboard.
 4. Export the dashboard with all dependencies as a Quick asset bundle.
 5. Store the immutable `.qs` artifact in a release bucket.
 6. Import it with `QuickDashboardProvisioner`, overriding resource IDs, names,
@@ -84,8 +111,7 @@ The example deployment parameters are in
 ## Security
 
 - Do not package credentials in the asset bundle.
-- Use a dedicated Athena workgroup with enforced output encryption and scan limits.
-- Restrict the Quick service role to the exact Athena workgroup, Glue catalog,
-  and S3 prefixes required by Ledger.
+- Keep the dashboard bucket private and encrypted.
+- Restrict the Quick service role to the exact Ledger S3 prefix.
 - Apply row-level security when multiple tenants or business units share one dataset.
 - Keep dashboard sharing and embedding permissions outside the public bundle.
