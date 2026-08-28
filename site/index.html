@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Interactive sample of the AxonLLM Ledger Amazon Quick dashboard for AWS generative AI cost intelligence."
+    >
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    >
+    <meta name="theme-color" content="#17132d">
+    <title>AxonLLM Ledger · Dashboard preview</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#dashboard-content">Skip to dashboard</a>
+
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a
+          class="brand"
+          href="https://github.com/hk-775/axonllm-ledger"
+          aria-label="AxonLLM Ledger repository"
+        >
+          <span class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </span>
+          <span class="brand-copy">
+            <strong>AxonLLM</strong>
+            <small>Ledger</small>
+          </span>
+        </a>
+
+        <div class="sidebar-label">Dashboard sheets</div>
+        <nav class="sheet-nav" aria-label="Dashboard sheets">
+          <button class="sheet-link is-active" data-sheet="executive-overview">
+            <span class="sheet-icon" aria-hidden="true">✦</span>
+            <span>Executive overview</span>
+          </button>
+          <button class="sheet-link" data-sheet="model-economics">
+            <span class="sheet-icon" aria-hidden="true">◇</span>
+            <span>Model economics</span>
+          </button>
+          <button class="sheet-link" data-sheet="organizational-allocation">
+            <span class="sheet-icon" aria-hidden="true">⑂</span>
+            <span>Organization</span>
+          </button>
+          <button class="sheet-link" data-sheet="budgets">
+            <span class="sheet-icon" aria-hidden="true">$</span>
+            <span>Budgets</span>
+          </button>
+          <button class="sheet-link" data-sheet="optimization">
+            <span class="sheet-icon" aria-hidden="true">↗</span>
+            <span>Optimization</span>
+          </button>
+          <button class="sheet-link" data-sheet="data-quality">
+            <span class="sheet-icon" aria-hidden="true">✓</span>
+            <span>Data quality</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="release-chip">
+            <span class="status-dot"></span>
+            <span>
+              <small>Open-source Beta</small>
+              <strong>v0.1.0</strong>
+            </span>
+          </div>
+          <a
+            class="sidebar-link"
+            href="https://github.com/hk-775/axonllm-ledger"
+          >
+            View source
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </aside>
+
+      <div class="workspace">
+        <header class="topbar">
+          <div>
+            <div class="product-kicker">
+              Amazon Quick dashboard preview
+              <span class="sample-pill">Sample</span>
+            </div>
+            <h1 id="sheet-title">Executive overview</h1>
+            <p id="sheet-description">
+              Portfolio-level AI spend, usage, savings, and budget posture.
+            </p>
+          </div>
+
+          <div class="topbar-actions">
+            <label class="filter-control" for="account-filter">
+              <span>AWS account</span>
+              <select id="account-filter" disabled>
+                <option>Loading accounts…</option>
+              </select>
+            </label>
+            <button
+              id="theme-toggle"
+              class="icon-button"
+              type="button"
+              aria-label="Use dark theme"
+              title="Toggle color theme"
+            >
+              <span class="theme-sun" aria-hidden="true">☼</span>
+              <span class="theme-moon" aria-hidden="true">◐</span>
+            </button>
+          </div>
+        </header>
+
+        <section class="sample-banner" aria-label="Sample data notice">
+          <span class="sample-banner-icon" aria-hidden="true">i</span>
+          <div>
+            <strong>Interactive product preview</strong>
+            <span>
+              Synthetic data only · no AWS account connected ·
+              <span id="period-label">loading reporting period</span>
+            </span>
+          </div>
+          <span class="sample-banner-meta">6 sheets · 28 visuals</span>
+        </section>
+
+        <main id="dashboard-content" tabindex="-1">
+          <div class="loading-state" aria-live="polite">
+            <div class="loading-heading"></div>
+            <div class="loading-grid">
+              <div></div><div></div><div></div>
+            </div>
+            <div class="loading-panels">
+              <div></div><div></div>
+            </div>
+            <span>Preparing the sample dashboard…</span>
+          </div>
+        </main>
+
+        <footer class="page-footer">
+          <span>AxonLLM Ledger · Amazon Bedrock cost intelligence</span>
+          <span>
+            Static preview generated from
+            <a
+              href="https://github.com/hk-775/axonllm-ledger/tree/main/sample_data"
+            >repository sample data</a>
+          </span>
+        </footer>
+      </div>
+    </div>
+
+    <noscript>
+      <div class="noscript">
+        This interactive dashboard requires JavaScript. The source data and
+        deployable Amazon Quick definition remain available in the repository.
+      </div>
+    </noscript>
+  </body>
+</html>

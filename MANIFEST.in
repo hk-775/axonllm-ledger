@@ -6,3 +6,6 @@ recursive-include dashboards *.json *.md
 recursive-include docs *.md *.drawio *.png
 recursive-include examples *.py
 recursive-include sample_data *.csv *.json
+recursive-include scripts *.py *.mjs
+recursive-include site *.html *.css *.js *.svg *.json
+include site/.nojekyll

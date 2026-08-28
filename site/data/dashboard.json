@@ -1,0 +1,812 @@
+{
+  "accounts": [
+    {
+      "account_id": "111111111111",
+      "account_name": "ML-Team-Prod",
+      "ou_id": "ou-engineering",
+      "ou_name": "Engineering",
+      "parent_ou_id": "ou-root",
+      "tags": {
+        "cost-center": "CC-1001",
+        "environment": "production",
+        "team": "ml"
+      }
+    },
+    {
+      "account_id": "222222222222",
+      "account_name": "DataScience-Dev",
+      "ou_id": "ou-engineering",
+      "ou_name": "Engineering",
+      "parent_ou_id": "ou-root",
+      "tags": {
+        "cost-center": "CC-1002",
+        "environment": "development",
+        "team": "data-science"
+      }
+    },
+    {
+      "account_id": "333333333333",
+      "account_name": "EU-Research-Lab",
+      "ou_id": "ou-research",
+      "ou_name": "Research",
+      "parent_ou_id": "ou-root",
+      "tags": {
+        "environment": "production",
+        "region": "eu-west-1",
+        "team": "research"
+      }
+    },
+    {
+      "account_id": "444444444444",
+      "account_name": "Platform-Eng",
+      "ou_id": "ou-platform",
+      "ou_name": "Platform",
+      "parent_ou_id": "ou-engineering",
+      "tags": {
+        "cost-center": "CC-1003",
+        "environment": "production",
+        "team": "platform"
+      }
+    },
+    {
+      "account_id": "555555555555",
+      "account_name": "APAC-GenAI-Team",
+      "ou_id": "ou-apac",
+      "ou_name": "APAC",
+      "parent_ou_id": "ou-root",
+      "tags": {
+        "environment": "production",
+        "region": "ap-southeast-1",
+        "team": "apac-genai"
+      }
+    }
+  ],
+  "budgets": [
+    {
+      "account_id": "111111111111",
+      "actual_spend_usd": 280.5,
+      "budget_id": "bdg-001",
+      "budget_limit_usd": 500.0,
+      "budget_name": "ML Team Monthly Budget",
+      "forecasted_spend_usd": 320.0,
+      "is_exceeded": false,
+      "period_end": "2026-03-31T23:59:59Z",
+      "period_start": "2026-03-01T00:00:00Z"
+    },
+    {
+      "account_id": "222222222222",
+      "actual_spend_usd": 215.75,
+      "budget_id": "bdg-002",
+      "budget_limit_usd": 200.0,
+      "budget_name": "Data Science Team Budget",
+      "forecasted_spend_usd": 250.0,
+      "is_exceeded": true,
+      "period_end": "2026-03-31T23:59:59Z",
+      "period_start": "2026-03-01T00:00:00Z"
+    },
+    {
+      "account_id": "333333333333",
+      "actual_spend_usd": 72.3,
+      "budget_id": "bdg-003",
+      "budget_limit_usd": 150.0,
+      "budget_name": "EU Research Budget",
+      "forecasted_spend_usd": 90.0,
+      "is_exceeded": false,
+      "period_end": "2026-03-31T23:59:59Z",
+      "period_start": "2026-03-01T00:00:00Z"
+    },
+    {
+      "account_id": "444444444444",
+      "actual_spend_usd": 155.0,
+      "budget_id": "bdg-004",
+      "budget_limit_usd": 300.0,
+      "budget_name": "Platform Engineering Budget",
+      "forecasted_spend_usd": 180.0,
+      "is_exceeded": false,
+      "period_end": "2026-03-31T23:59:59Z",
+      "period_start": "2026-03-01T00:00:00Z"
+    },
+    {
+      "account_id": "555555555555",
+      "actual_spend_usd": 108.4,
+      "budget_id": "bdg-005",
+      "budget_limit_usd": 100.0,
+      "budget_name": "APAC Team Budget",
+      "forecasted_spend_usd": 120.0,
+      "is_exceeded": true,
+      "period_end": "2026-03-31T23:59:59Z",
+      "period_start": "2026-03-01T00:00:00Z"
+    }
+  ],
+  "ingestion": {
+    "accepted_rows": 32,
+    "duplicates_removed": 3,
+    "incomplete_skipped": 1,
+    "non_genai_filtered": 2,
+    "raw_rows": 38
+  },
+  "model_access": [
+    {
+      "account_id": "111111111111",
+      "model_id": "anthropic.claude-3-haiku",
+      "user_id": "user-alice"
+    },
+    {
+      "account_id": "111111111111",
+      "model_id": "anthropic.claude-3-opus",
+      "user_id": "user-alice"
+    },
+    {
+      "account_id": "111111111111",
+      "model_id": "anthropic.claude-3-sonnet",
+      "user_id": "user-alice"
+    },
+    {
+      "account_id": "111111111111",
+      "model_id": "amazon.titan-text-express",
+      "user_id": "user-bob"
+    },
+    {
+      "account_id": "111111111111",
+      "model_id": "anthropic.claude-3-sonnet",
+      "user_id": "user-bob"
+    },
+    {
+      "account_id": "222222222222",
+      "model_id": "anthropic.claude-3-sonnet",
+      "user_id": "user-bob"
+    },
+    {
+      "account_id": "222222222222",
+      "model_id": "amazon.titan-text-express",
+      "user_id": "user-carol"
+    },
+    {
+      "account_id": "222222222222",
+      "model_id": "anthropic.claude-3-opus",
+      "user_id": "user-carol"
+    },
+    {
+      "account_id": "222222222222",
+      "model_id": "anthropic.claude-3-sonnet",
+      "user_id": "user-carol"
+    },
+    {
+      "account_id": "222222222222",
+      "model_id": "genai-endpoint-1",
+      "user_id": "user-carol"
+    },
+    {
+      "account_id": "222222222222",
+      "model_id": "stability.stable-diffusion-xl",
+      "user_id": "user-carol"
+    },
+    {
+      "account_id": "333333333333",
+      "model_id": "amazon.titan-embed-text",
+      "user_id": "user-dave"
+    },
+    {
+      "account_id": "333333333333",
+      "model_id": "anthropic.claude-3-haiku",
+      "user_id": "user-dave"
+    },
+    {
+      "account_id": "333333333333",
+      "model_id": "anthropic.claude-3-sonnet",
+      "user_id": "user-dave"
+    },
+    {
+      "account_id": "333333333333",
+      "model_id": "anthropic.claude-3-haiku",
+      "user_id": "user-eve"
+    },
+    {
+      "account_id": "333333333333",
+      "model_id": "meta.llama3-70b-instruct",
+      "user_id": "user-eve"
+    },
+    {
+      "account_id": "444444444444",
+      "model_id": "amazon.titan-embed-text",
+      "user_id": "user-frank"
+    },
+    {
+      "account_id": "444444444444",
+      "model_id": "anthropic.claude-3-haiku",
+      "user_id": "user-frank"
+    },
+    {
+      "account_id": "444444444444",
+      "model_id": "anthropic.claude-3-sonnet",
+      "user_id": "user-frank"
+    },
+    {
+      "account_id": "444444444444",
+      "model_id": "meta.llama3-70b-instruct",
+      "user_id": "user-frank"
+    },
+    {
+      "account_id": "444444444444",
+      "model_id": "anthropic.claude-3-opus",
+      "user_id": "user-grace"
+    },
+    {
+      "account_id": "444444444444",
+      "model_id": "anthropic.claude-3-sonnet",
+      "user_id": "user-grace"
+    },
+    {
+      "account_id": "555555555555",
+      "model_id": "anthropic.claude-3-haiku",
+      "user_id": "user-hiro"
+    },
+    {
+      "account_id": "555555555555",
+      "model_id": "anthropic.claude-3-opus",
+      "user_id": "user-hiro"
+    },
+    {
+      "account_id": "555555555555",
+      "model_id": "anthropic.claude-3-sonnet",
+      "user_id": "user-hiro"
+    },
+    {
+      "account_id": "555555555555",
+      "model_id": "genai-finetuned-model",
+      "user_id": "user-hiro"
+    },
+    {
+      "account_id": "555555555555",
+      "model_id": "meta.llama3-70b-instruct",
+      "user_id": "user-hiro"
+    }
+  ],
+  "period": {
+    "end": "2026-03-02T07:00:00Z",
+    "start": "2026-03-01T00:00:00Z"
+  },
+  "project": {
+    "dashboard_name": "Amazon Quick dashboard preview",
+    "name": "AxonLLM Ledger",
+    "release": "0.1.0 Beta",
+    "sample_data": true,
+    "sheets": 6,
+    "visuals": 28
+  },
+  "quick_table_counts": {
+    "budgets": 5,
+    "cost_aggregations": 26,
+    "model_access": 26,
+    "optimization_recommendations": 5
+  },
+  "recommendations": [
+    {
+      "account_id": "111111111111",
+      "description": "Consider using Claude 3 Sonnet instead of Opus for summarization tasks \u2014 60% cost reduction with similar quality",
+      "estimated_savings_usd": 45.0,
+      "model_id": "anthropic.claude-3-opus",
+      "recommendation_id": "coh-001",
+      "recommendation_type": "RightsizeModel",
+      "service": "AmazonBedrock"
+    },
+    {
+      "account_id": "333333333333",
+      "description": "Batch inference requests to reduce per-invocation overhead \u2014 estimated 40% savings on high-volume Haiku usage",
+      "estimated_savings_usd": 12.5,
+      "model_id": "anthropic.claude-3-haiku",
+      "recommendation_id": "coh-002",
+      "recommendation_type": "BatchProcessing",
+      "service": "AmazonBedrock"
+    },
+    {
+      "account_id": "444444444444",
+      "description": "Switch to provisioned throughput for Llama 3 \u2014 consistent usage pattern qualifies for reserved pricing",
+      "estimated_savings_usd": 30.0,
+      "model_id": "meta.llama3-70b-instruct",
+      "recommendation_id": "coh-003",
+      "recommendation_type": "ProvisionedThroughput",
+      "service": "AmazonBedrock"
+    },
+    {
+      "account_id": "555555555555",
+      "description": "Consolidate SageMaker GenAI endpoints \u2014 two endpoints serve similar traffic and can be merged",
+      "estimated_savings_usd": 18.0,
+      "model_id": null,
+      "recommendation_id": "coh-004",
+      "recommendation_type": "EndpointConsolidation",
+      "service": "AmazonSageMaker"
+    },
+    {
+      "account_id": "222222222222",
+      "description": "Reduce image resolution for non-production workloads to cut Stable Diffusion costs",
+      "estimated_savings_usd": 8.0,
+      "model_id": "stability.stable-diffusion-xl",
+      "recommendation_id": "coh-005",
+      "recommendation_type": "RightsizeModel",
+      "service": "AmazonBedrock"
+    }
+  ],
+  "records": [
+    {
+      "account_id": "111111111111",
+      "account_name": "ML-Team-Prod",
+      "cost_usd": 0.0045,
+      "input_tokens": 1500,
+      "invocations": 1,
+      "line_item_id": "li-001",
+      "model_id": "anthropic.claude-3-sonnet",
+      "organizational_unit": "Engineering",
+      "output_tokens": 800,
+      "period_end": "2026-03-01T01:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-01T00:00:00Z",
+      "user_id": "user-alice"
+    },
+    {
+      "account_id": "111111111111",
+      "account_name": "ML-Team-Prod",
+      "cost_usd": 0.0008,
+      "input_tokens": 500,
+      "invocations": 1,
+      "line_item_id": "li-003",
+      "model_id": "amazon.titan-text-express",
+      "organizational_unit": "Engineering",
+      "output_tokens": 200,
+      "period_end": "2026-03-01T01:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-01T00:00:00Z",
+      "user_id": "user-bob"
+    },
+    {
+      "account_id": "222222222222",
+      "account_name": "DataScience-Dev",
+      "cost_usd": 0.012,
+      "input_tokens": 1000,
+      "invocations": 1,
+      "line_item_id": "li-005",
+      "model_id": "genai-endpoint-1",
+      "organizational_unit": "Engineering",
+      "output_tokens": 0,
+      "period_end": "2026-03-01T01:00:00Z",
+      "service": "AmazonSageMaker",
+      "timestamp": "2026-03-01T00:00:00Z",
+      "user_id": "user-carol"
+    },
+    {
+      "account_id": "444444444444",
+      "account_name": "Platform-Eng",
+      "cost_usd": 0.021,
+      "input_tokens": 7000,
+      "invocations": 5,
+      "line_item_id": "li-017",
+      "model_id": "anthropic.claude-3-sonnet",
+      "organizational_unit": "Platform",
+      "output_tokens": 3500,
+      "period_end": "2026-03-01T01:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-01T00:00:00Z",
+      "user_id": "user-frank"
+    },
+    {
+      "account_id": "555555555555",
+      "account_name": "APAC-GenAI-Team",
+      "cost_usd": 0.0054,
+      "input_tokens": 1800,
+      "invocations": 2,
+      "line_item_id": "li-022",
+      "model_id": "anthropic.claude-3-sonnet",
+      "organizational_unit": "APAC",
+      "output_tokens": 900,
+      "period_end": "2026-03-01T01:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-01T00:00:00Z",
+      "user_id": "user-hiro"
+    },
+    {
+      "account_id": "111111111111",
+      "account_name": "ML-Team-Prod",
+      "cost_usd": 0.0096,
+      "input_tokens": 3200,
+      "invocations": 2,
+      "line_item_id": "li-002",
+      "model_id": "anthropic.claude-3-sonnet",
+      "organizational_unit": "Engineering",
+      "output_tokens": 1600,
+      "period_end": "2026-03-01T02:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-01T01:00:00Z",
+      "user_id": "user-alice"
+    },
+    {
+      "account_id": "444444444444",
+      "account_name": "Platform-Eng",
+      "cost_usd": 0.0075,
+      "input_tokens": 25000,
+      "invocations": 15,
+      "line_item_id": "li-018",
+      "model_id": "anthropic.claude-3-haiku",
+      "organizational_unit": "Platform",
+      "output_tokens": 12500,
+      "period_end": "2026-03-01T02:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-01T01:00:00Z",
+      "user_id": "user-frank"
+    },
+    {
+      "account_id": "555555555555",
+      "account_name": "APAC-GenAI-Team",
+      "cost_usd": 0.0045,
+      "input_tokens": 15000,
+      "invocations": 10,
+      "line_item_id": "li-023",
+      "model_id": "anthropic.claude-3-haiku",
+      "organizational_unit": "APAC",
+      "output_tokens": 7500,
+      "period_end": "2026-03-01T02:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-01T01:00:00Z",
+      "user_id": "user-hiro"
+    },
+    {
+      "account_id": "222222222222",
+      "account_name": "DataScience-Dev",
+      "cost_usd": 0.006,
+      "input_tokens": 2000,
+      "invocations": 1,
+      "line_item_id": "li-004",
+      "model_id": "anthropic.claude-3-sonnet",
+      "organizational_unit": "Engineering",
+      "output_tokens": 1000,
+      "period_end": "2026-03-01T03:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-01T02:00:00Z",
+      "user_id": "user-carol"
+    },
+    {
+      "account_id": "444444444444",
+      "account_name": "Platform-Eng",
+      "cost_usd": 0.005,
+      "input_tokens": 50000,
+      "invocations": 10,
+      "line_item_id": "li-019",
+      "model_id": "amazon.titan-embed-text",
+      "organizational_unit": "Platform",
+      "output_tokens": 0,
+      "period_end": "2026-03-01T03:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-01T02:00:00Z",
+      "user_id": "user-frank"
+    },
+    {
+      "account_id": "555555555555",
+      "account_name": "APAC-GenAI-Team",
+      "cost_usd": 0.03,
+      "input_tokens": 20000,
+      "invocations": 12,
+      "line_item_id": "li-024",
+      "model_id": "meta.llama3-70b-instruct",
+      "organizational_unit": "APAC",
+      "output_tokens": 10000,
+      "period_end": "2026-03-01T03:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-01T02:00:00Z",
+      "user_id": "user-hiro"
+    },
+    {
+      "account_id": "333333333333",
+      "account_name": "EU-Research-Lab",
+      "cost_usd": 0.003,
+      "input_tokens": 10000,
+      "invocations": 5,
+      "line_item_id": "li-007",
+      "model_id": "anthropic.claude-3-haiku",
+      "organizational_unit": "Research",
+      "output_tokens": 5000,
+      "period_end": "2026-03-02T01:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T00:00:00Z",
+      "user_id": "user-dave"
+    },
+    {
+      "account_id": "111111111111",
+      "account_name": "ML-Team-Prod",
+      "cost_usd": 0.012,
+      "input_tokens": 4000,
+      "invocations": 3,
+      "line_item_id": "li-009",
+      "model_id": "anthropic.claude-3-sonnet",
+      "organizational_unit": "Engineering",
+      "output_tokens": 2000,
+      "period_end": "2026-03-02T01:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T00:00:00Z",
+      "user_id": "user-bob"
+    },
+    {
+      "account_id": "222222222222",
+      "account_name": "DataScience-Dev",
+      "cost_usd": 0.045,
+      "input_tokens": 3000,
+      "invocations": 2,
+      "line_item_id": "li-013",
+      "model_id": "anthropic.claude-3-opus",
+      "organizational_unit": "Engineering",
+      "output_tokens": 1500,
+      "period_end": "2026-03-02T01:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T00:00:00Z",
+      "user_id": "user-carol"
+    },
+    {
+      "account_id": "444444444444",
+      "account_name": "Platform-Eng",
+      "cost_usd": 0.027,
+      "input_tokens": 9000,
+      "invocations": 7,
+      "line_item_id": "li-020",
+      "model_id": "anthropic.claude-3-sonnet",
+      "organizational_unit": "Platform",
+      "output_tokens": 4500,
+      "period_end": "2026-03-02T01:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T00:00:00Z",
+      "user_id": "user-grace"
+    },
+    {
+      "account_id": "555555555555",
+      "account_name": "APAC-GenAI-Team",
+      "cost_usd": 0.025,
+      "input_tokens": 3000,
+      "invocations": 1,
+      "line_item_id": "li-025",
+      "model_id": "genai-finetuned-model",
+      "organizational_unit": "APAC",
+      "output_tokens": 0,
+      "period_end": "2026-03-02T01:00:00Z",
+      "service": "AmazonSageMaker",
+      "timestamp": "2026-03-02T00:00:00Z",
+      "user_id": "user-hiro"
+    },
+    {
+      "account_id": "333333333333",
+      "account_name": "EU-Research-Lab",
+      "cost_usd": 0.0024,
+      "input_tokens": 8000,
+      "invocations": 3,
+      "line_item_id": "li-008",
+      "model_id": "anthropic.claude-3-haiku",
+      "organizational_unit": "Research",
+      "output_tokens": 4000,
+      "period_end": "2026-03-02T02:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T01:00:00Z",
+      "user_id": "user-dave"
+    },
+    {
+      "account_id": "222222222222",
+      "account_name": "DataScience-Dev",
+      "cost_usd": 0.0035,
+      "input_tokens": 2200,
+      "invocations": 3,
+      "line_item_id": "li-014",
+      "model_id": "amazon.titan-text-express",
+      "organizational_unit": "Engineering",
+      "output_tokens": 1100,
+      "period_end": "2026-03-02T02:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T01:00:00Z",
+      "user_id": "user-carol"
+    },
+    {
+      "account_id": "444444444444",
+      "account_name": "Platform-Eng",
+      "cost_usd": 0.06,
+      "input_tokens": 4000,
+      "invocations": 3,
+      "line_item_id": "li-021",
+      "model_id": "anthropic.claude-3-opus",
+      "organizational_unit": "Platform",
+      "output_tokens": 2000,
+      "period_end": "2026-03-02T02:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T01:00:00Z",
+      "user_id": "user-grace"
+    },
+    {
+      "account_id": "555555555555",
+      "account_name": "APAC-GenAI-Team",
+      "cost_usd": 0.0375,
+      "input_tokens": 2500,
+      "invocations": 2,
+      "line_item_id": "li-034",
+      "model_id": "anthropic.claude-3-opus",
+      "organizational_unit": "APAC",
+      "output_tokens": 1200,
+      "period_end": "2026-03-02T02:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T01:00:00Z",
+      "user_id": "user-hiro"
+    },
+    {
+      "account_id": "111111111111",
+      "account_name": "ML-Team-Prod",
+      "cost_usd": 0.09,
+      "input_tokens": 6000,
+      "invocations": 4,
+      "line_item_id": "li-011",
+      "model_id": "anthropic.claude-3-opus",
+      "organizational_unit": "Engineering",
+      "output_tokens": 3000,
+      "period_end": "2026-03-02T03:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T02:00:00Z",
+      "user_id": "user-alice"
+    },
+    {
+      "account_id": "333333333333",
+      "account_name": "EU-Research-Lab",
+      "cost_usd": 0.0165,
+      "input_tokens": 5500,
+      "invocations": 4,
+      "line_item_id": "li-015",
+      "model_id": "anthropic.claude-3-sonnet",
+      "organizational_unit": "Research",
+      "output_tokens": 2800,
+      "period_end": "2026-03-02T03:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T02:00:00Z",
+      "user_id": "user-dave"
+    },
+    {
+      "account_id": "222222222222",
+      "account_name": "DataScience-Dev",
+      "cost_usd": 0.0135,
+      "input_tokens": 4500,
+      "invocations": 3,
+      "line_item_id": "li-028",
+      "model_id": "anthropic.claude-3-sonnet",
+      "organizational_unit": "Engineering",
+      "output_tokens": 2200,
+      "period_end": "2026-03-02T03:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T02:00:00Z",
+      "user_id": "user-bob"
+    },
+    {
+      "account_id": "444444444444",
+      "account_name": "Platform-Eng",
+      "cost_usd": 0.024,
+      "input_tokens": 16000,
+      "invocations": 10,
+      "line_item_id": "li-033",
+      "model_id": "meta.llama3-70b-instruct",
+      "organizational_unit": "Platform",
+      "output_tokens": 8000,
+      "period_end": "2026-03-02T03:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T02:00:00Z",
+      "user_id": "user-frank"
+    },
+    {
+      "account_id": "111111111111",
+      "account_name": "ML-Team-Prod",
+      "cost_usd": 0.1275,
+      "input_tokens": 8500,
+      "invocations": 6,
+      "line_item_id": "li-012",
+      "model_id": "anthropic.claude-3-opus",
+      "organizational_unit": "Engineering",
+      "output_tokens": 4200,
+      "period_end": "2026-03-02T04:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T03:00:00Z",
+      "user_id": "user-alice"
+    },
+    {
+      "account_id": "333333333333",
+      "account_name": "EU-Research-Lab",
+      "cost_usd": 0.018,
+      "input_tokens": 12000,
+      "invocations": 8,
+      "line_item_id": "li-016",
+      "model_id": "meta.llama3-70b-instruct",
+      "organizational_unit": "Research",
+      "output_tokens": 6000,
+      "period_end": "2026-03-02T04:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T03:00:00Z",
+      "user_id": "user-eve"
+    },
+    {
+      "account_id": "222222222222",
+      "account_name": "DataScience-Dev",
+      "cost_usd": 0.05,
+      "input_tokens": 5,
+      "invocations": 5,
+      "line_item_id": "li-031",
+      "model_id": "stability.stable-diffusion-xl",
+      "organizational_unit": "Engineering",
+      "output_tokens": 5,
+      "period_end": "2026-03-02T04:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T03:00:00Z",
+      "user_id": "user-carol"
+    },
+    {
+      "account_id": "111111111111",
+      "account_name": "ML-Team-Prod",
+      "cost_usd": 0.0014,
+      "input_tokens": 900,
+      "invocations": 2,
+      "line_item_id": "li-026",
+      "model_id": "amazon.titan-text-express",
+      "organizational_unit": "Engineering",
+      "output_tokens": 450,
+      "period_end": "2026-03-02T05:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T04:00:00Z",
+      "user_id": "user-bob"
+    },
+    {
+      "account_id": "333333333333",
+      "account_name": "EU-Research-Lab",
+      "cost_usd": 0.009,
+      "input_tokens": 30000,
+      "invocations": 20,
+      "line_item_id": "li-029",
+      "model_id": "anthropic.claude-3-haiku",
+      "organizational_unit": "Research",
+      "output_tokens": 15000,
+      "period_end": "2026-03-02T05:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T04:00:00Z",
+      "user_id": "user-eve"
+    },
+    {
+      "account_id": "111111111111",
+      "account_name": "ML-Team-Prod",
+      "cost_usd": 0.0054,
+      "input_tokens": 18000,
+      "invocations": 12,
+      "line_item_id": "li-027",
+      "model_id": "anthropic.claude-3-haiku",
+      "organizational_unit": "Engineering",
+      "output_tokens": 9000,
+      "period_end": "2026-03-02T06:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T05:00:00Z",
+      "user_id": "user-alice"
+    },
+    {
+      "account_id": "333333333333",
+      "account_name": "EU-Research-Lab",
+      "cost_usd": 0.004,
+      "input_tokens": 40000,
+      "invocations": 8,
+      "line_item_id": "li-032",
+      "model_id": "amazon.titan-embed-text",
+      "organizational_unit": "Research",
+      "output_tokens": 0,
+      "period_end": "2026-03-02T06:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T05:00:00Z",
+      "user_id": "user-dave"
+    },
+    {
+      "account_id": "111111111111",
+      "account_name": "ML-Team-Prod",
+      "cost_usd": 0.015,
+      "input_tokens": 5000,
+      "invocations": 4,
+      "line_item_id": "li-035",
+      "model_id": "anthropic.claude-3-sonnet",
+      "organizational_unit": "Engineering",
+      "output_tokens": 2500,
+      "period_end": "2026-03-02T07:00:00Z",
+      "service": "AmazonBedrock",
+      "timestamp": "2026-03-02T06:00:00Z",
+      "user_id": "user-alice"
+    }
+  ]
+}

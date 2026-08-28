@@ -149,6 +149,12 @@ The dashboard definition is stored in
 and versioned with the code. The deployer uses the standard AWS credential
 chain and does not accept or persist plaintext credentials.
 
+Explore the
+[interactive sample dashboard](https://hk-775.github.io/axonllm-ledger/)
+without an AWS account. The GitHub Pages preview renders all six sheets from
+the repository's synthetic sample data; it does not connect to AWS or expose
+credentials.
+
 Use `--dataset-json` to deploy a production Quick table export instead of the
 sample file. See [the Quick dashboard guide](dashboards/quick/README.md) for
 the resource model, sheet inventory, and optional asset-bundle export workflow.
