@@ -1,0 +1,52 @@
+[
+  {
+    "budget_id": "bdg-001",
+    "budget_name": "ML Team Monthly Budget",
+    "account_id": "111111111111",
+    "budget_limit": "500.00",
+    "forecasted_spend": "320.00",
+    "actual_spend": "280.50",
+    "period_start": "2026-03-01T00:00:00Z",
+    "period_end": "2026-03-31T23:59:59Z"
+  },
+  {
+    "budget_id": "bdg-002",
+    "budget_name": "Data Science Team Budget",
+    "account_id": "222222222222",
+    "budget_limit": "200.00",
+    "forecasted_spend": "250.00",
+    "actual_spend": "215.75",
+    "period_start": "2026-03-01T00:00:00Z",
+    "period_end": "2026-03-31T23:59:59Z"
+  },
+  {
+    "budget_id": "bdg-003",
+    "budget_name": "EU Research Budget",
+    "account_id": "333333333333",
+    "budget_limit": "150.00",
+    "forecasted_spend": "90.00",
+    "actual_spend": "72.30",
+    "period_start": "2026-03-01T00:00:00Z",
+    "period_end": "2026-03-31T23:59:59Z"
+  },
+  {
+    "budget_id": "bdg-004",
+    "budget_name": "Platform Engineering Budget",
+    "account_id": "444444444444",
+    "budget_limit": "300.00",
+    "forecasted_spend": "180.00",
+    "actual_spend": "155.00",
+    "period_start": "2026-03-01T00:00:00Z",
+    "period_end": "2026-03-31T23:59:59Z"
+  },
+  {
+    "budget_id": "bdg-005",
+    "budget_name": "APAC Team Budget",
+    "account_id": "555555555555",
+    "budget_limit": "100.00",
+    "forecasted_spend": "120.00",
+    "actual_spend": "108.40",
+    "period_start": "2026-03-01T00:00:00Z",
+    "period_end": "2026-03-31T23:59:59Z"
+  }
+]

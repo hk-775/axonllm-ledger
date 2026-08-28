@@ -1,0 +1,29 @@
+{
+  "aws_account_id": "123456789012",
+  "job_id": "axonllm-ledger-dashboard-v1",
+  "source_s3_uri": "s3://dashboard-artifacts/axonllm-ledger-v1.qs",
+  "failure_action": "ROLLBACK",
+  "strict_validation": true,
+  "override_parameters": {
+    "ResourceIdOverrideConfiguration": {
+      "PrefixForAllResources": "axonllm-ledger-"
+    },
+    "DataSources": [
+      {
+        "DataSourceId": "SOURCE_ATHENA_DATA_SOURCE_ID",
+        "Name": "AxonLLM Ledger Athena",
+        "DataSourceParameters": {
+          "AthenaParameters": {
+            "WorkGroup": "axonllm-ledger"
+          }
+        }
+      }
+    ],
+    "Dashboards": [
+      {
+        "DashboardId": "SOURCE_DASHBOARD_ID",
+        "Name": "AxonLLM Ledger"
+      }
+    ]
+  }
+}

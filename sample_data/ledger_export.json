@@ -1,0 +1,324 @@
+{
+  "export_period": {
+    "start": "2026-03-01T00:00:00",
+    "end": "2026-03-02T07:00:00"
+  },
+  "cost_by_user": [
+    {
+      "dimension_value": "user-alice",
+      "total_cost": "0.2520",
+      "total_invocations": 29,
+      "total_input_tokens": 42200,
+      "total_output_tokens": 21100
+    },
+    {
+      "dimension_value": "user-bob",
+      "total_cost": "0.0277",
+      "total_invocations": 9,
+      "total_input_tokens": 9900,
+      "total_output_tokens": 4850
+    },
+    {
+      "dimension_value": "user-carol",
+      "total_cost": "0.1165",
+      "total_invocations": 12,
+      "total_input_tokens": 8205,
+      "total_output_tokens": 3605
+    },
+    {
+      "dimension_value": "user-dave",
+      "total_cost": "0.0259",
+      "total_invocations": 20,
+      "total_input_tokens": 63500,
+      "total_output_tokens": 11800
+    },
+    {
+      "dimension_value": "user-eve",
+      "total_cost": "0.027",
+      "total_invocations": 28,
+      "total_input_tokens": 42000,
+      "total_output_tokens": 21000
+    },
+    {
+      "dimension_value": "user-frank",
+      "total_cost": "0.0575",
+      "total_invocations": 40,
+      "total_input_tokens": 98000,
+      "total_output_tokens": 24000
+    },
+    {
+      "dimension_value": "user-grace",
+      "total_cost": "0.087",
+      "total_invocations": 10,
+      "total_input_tokens": 13000,
+      "total_output_tokens": 6500
+    },
+    {
+      "dimension_value": "user-hiro",
+      "total_cost": "0.1024",
+      "total_invocations": 27,
+      "total_input_tokens": 42300,
+      "total_output_tokens": 19600
+    }
+  ],
+  "cost_by_account": [
+    {
+      "dimension_value": "111111111111",
+      "total_cost": "0.2662",
+      "total_invocations": 35,
+      "total_input_tokens": 47600,
+      "total_output_tokens": 23750
+    },
+    {
+      "dimension_value": "222222222222",
+      "total_cost": "0.1300",
+      "total_invocations": 15,
+      "total_input_tokens": 12705,
+      "total_output_tokens": 5805
+    },
+    {
+      "dimension_value": "333333333333",
+      "total_cost": "0.0529",
+      "total_invocations": 48,
+      "total_input_tokens": 105500,
+      "total_output_tokens": 32800
+    },
+    {
+      "dimension_value": "444444444444",
+      "total_cost": "0.1445",
+      "total_invocations": 50,
+      "total_input_tokens": 111000,
+      "total_output_tokens": 30500
+    },
+    {
+      "dimension_value": "555555555555",
+      "total_cost": "0.1024",
+      "total_invocations": 27,
+      "total_input_tokens": 42300,
+      "total_output_tokens": 19600
+    }
+  ],
+  "cost_by_ou": [
+    {
+      "dimension_value": "Engineering",
+      "total_cost": "0.3962",
+      "total_invocations": 50,
+      "total_input_tokens": 60305,
+      "total_output_tokens": 29555
+    },
+    {
+      "dimension_value": "Research",
+      "total_cost": "0.0529",
+      "total_invocations": 48,
+      "total_input_tokens": 105500,
+      "total_output_tokens": 32800
+    },
+    {
+      "dimension_value": "Platform",
+      "total_cost": "0.1445",
+      "total_invocations": 50,
+      "total_input_tokens": 111000,
+      "total_output_tokens": 30500
+    },
+    {
+      "dimension_value": "APAC",
+      "total_cost": "0.1024",
+      "total_invocations": 27,
+      "total_input_tokens": 42300,
+      "total_output_tokens": 19600
+    }
+  ],
+  "cost_by_model": [
+    {
+      "dimension_value": "anthropic.claude-3-sonnet",
+      "total_cost": "0.1305",
+      "total_invocations": 32,
+      "total_input_tokens": 43500,
+      "total_output_tokens": 21800
+    },
+    {
+      "dimension_value": "amazon.titan-text-express",
+      "total_cost": "0.0057",
+      "total_invocations": 6,
+      "total_input_tokens": 3600,
+      "total_output_tokens": 1750
+    },
+    {
+      "dimension_value": "genai-endpoint-1",
+      "total_cost": "0.012",
+      "total_invocations": 1,
+      "total_input_tokens": 1000,
+      "total_output_tokens": 0
+    },
+    {
+      "dimension_value": "anthropic.claude-3-haiku",
+      "total_cost": "0.0318",
+      "total_invocations": 65,
+      "total_input_tokens": 106000,
+      "total_output_tokens": 53000
+    },
+    {
+      "dimension_value": "anthropic.claude-3-opus",
+      "total_cost": "0.3600",
+      "total_invocations": 17,
+      "total_input_tokens": 24000,
+      "total_output_tokens": 11900
+    },
+    {
+      "dimension_value": "meta.llama3-70b-instruct",
+      "total_cost": "0.072",
+      "total_invocations": 30,
+      "total_input_tokens": 48000,
+      "total_output_tokens": 24000
+    },
+    {
+      "dimension_value": "amazon.titan-embed-text",
+      "total_cost": "0.009",
+      "total_invocations": 18,
+      "total_input_tokens": 90000,
+      "total_output_tokens": 0
+    },
+    {
+      "dimension_value": "genai-finetuned-model",
+      "total_cost": "0.025",
+      "total_invocations": 1,
+      "total_input_tokens": 3000,
+      "total_output_tokens": 0
+    },
+    {
+      "dimension_value": "stability.stable-diffusion-xl",
+      "total_cost": "0.05",
+      "total_invocations": 5,
+      "total_input_tokens": 5,
+      "total_output_tokens": 5
+    }
+  ],
+  "model_access_per_user": {
+    "user-alice": [
+      "anthropic.claude-3-haiku",
+      "anthropic.claude-3-opus",
+      "anthropic.claude-3-sonnet"
+    ],
+    "user-bob": [
+      "amazon.titan-text-express",
+      "anthropic.claude-3-sonnet"
+    ],
+    "user-carol": [
+      "amazon.titan-text-express",
+      "anthropic.claude-3-opus",
+      "anthropic.claude-3-sonnet",
+      "genai-endpoint-1",
+      "stability.stable-diffusion-xl"
+    ],
+    "user-dave": [
+      "amazon.titan-embed-text",
+      "anthropic.claude-3-haiku",
+      "anthropic.claude-3-sonnet"
+    ],
+    "user-eve": [
+      "anthropic.claude-3-haiku",
+      "meta.llama3-70b-instruct"
+    ],
+    "user-frank": [
+      "amazon.titan-embed-text",
+      "anthropic.claude-3-haiku",
+      "anthropic.claude-3-sonnet",
+      "meta.llama3-70b-instruct"
+    ],
+    "user-grace": [
+      "anthropic.claude-3-opus",
+      "anthropic.claude-3-sonnet"
+    ],
+    "user-hiro": [
+      "anthropic.claude-3-haiku",
+      "anthropic.claude-3-opus",
+      "anthropic.claude-3-sonnet",
+      "genai-finetuned-model",
+      "meta.llama3-70b-instruct"
+    ]
+  },
+  "budget_comparisons": [
+    {
+      "accountId": "111111111111",
+      "budgetName": "ML Team Monthly Budget",
+      "budgetLimit": "500.00",
+      "actualSpend": "280.50",
+      "forecastedSpend": "320.00",
+      "exceeded": false
+    },
+    {
+      "accountId": "222222222222",
+      "budgetName": "Data Science Team Budget",
+      "budgetLimit": "200.00",
+      "actualSpend": "215.75",
+      "forecastedSpend": "250.00",
+      "exceeded": true
+    },
+    {
+      "accountId": "333333333333",
+      "budgetName": "EU Research Budget",
+      "budgetLimit": "150.00",
+      "actualSpend": "72.30",
+      "forecastedSpend": "90.00",
+      "exceeded": false
+    },
+    {
+      "accountId": "444444444444",
+      "budgetName": "Platform Engineering Budget",
+      "budgetLimit": "300.00",
+      "actualSpend": "155.00",
+      "forecastedSpend": "180.00",
+      "exceeded": false
+    },
+    {
+      "accountId": "555555555555",
+      "budgetName": "APAC Team Budget",
+      "budgetLimit": "100.00",
+      "actualSpend": "108.40",
+      "forecastedSpend": "120.00",
+      "exceeded": true
+    }
+  ],
+  "optimization_recommendations": [
+    {
+      "recommendationId": "coh-001",
+      "accountId": "111111111111",
+      "modelId": "anthropic.claude-3-opus",
+      "estimatedSavings": "45.00",
+      "recommendationType": "RightsizeModel",
+      "description": "Consider using Claude 3 Sonnet instead of Opus for summarization tasks \u2014 60% cost reduction with similar quality"
+    },
+    {
+      "recommendationId": "coh-002",
+      "accountId": "333333333333",
+      "modelId": "anthropic.claude-3-haiku",
+      "estimatedSavings": "12.50",
+      "recommendationType": "BatchProcessing",
+      "description": "Batch inference requests to reduce per-invocation overhead \u2014 estimated 40% savings on high-volume Haiku usage"
+    },
+    {
+      "recommendationId": "coh-003",
+      "accountId": "444444444444",
+      "modelId": "meta.llama3-70b-instruct",
+      "estimatedSavings": "30.00",
+      "recommendationType": "ProvisionedThroughput",
+      "description": "Switch to provisioned throughput for Llama 3 \u2014 consistent usage pattern qualifies for reserved pricing"
+    },
+    {
+      "recommendationId": "coh-004",
+      "accountId": "555555555555",
+      "modelId": null,
+      "estimatedSavings": "18.00",
+      "recommendationType": "EndpointConsolidation",
+      "description": "Consolidate SageMaker GenAI endpoints \u2014 two endpoints serve similar traffic and can be merged"
+    },
+    {
+      "recommendationId": "coh-005",
+      "accountId": "222222222222",
+      "modelId": "stability.stable-diffusion-xl",
+      "estimatedSavings": "8.00",
+      "recommendationType": "RightsizeModel",
+      "description": "Reduce image resolution for non-production workloads to cut Stable Diffusion costs"
+    }
+  ]
+}

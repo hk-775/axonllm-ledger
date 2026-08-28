@@ -1,0 +1,56 @@
+[
+  {
+    "recommendation_id": "coh-001",
+    "account_id": "111111111111",
+    "model_id": "anthropic.claude-3-opus",
+    "recommendation_type": "RightsizeModel",
+    "estimated_savings": "45.00",
+    "description": "Consider using Claude 3 Sonnet instead of Opus for summarization tasks — 60% cost reduction with similar quality",
+    "service": "AmazonBedrock"
+  },
+  {
+    "recommendation_id": "coh-002",
+    "account_id": "333333333333",
+    "model_id": "anthropic.claude-3-haiku",
+    "recommendation_type": "BatchProcessing",
+    "estimated_savings": "12.50",
+    "description": "Batch inference requests to reduce per-invocation overhead — estimated 40% savings on high-volume Haiku usage",
+    "service": "AmazonBedrock"
+  },
+  {
+    "recommendation_id": "coh-003",
+    "account_id": "444444444444",
+    "model_id": "meta.llama3-70b-instruct",
+    "recommendation_type": "ProvisionedThroughput",
+    "estimated_savings": "30.00",
+    "description": "Switch to provisioned throughput for Llama 3 — consistent usage pattern qualifies for reserved pricing",
+    "service": "AmazonBedrock"
+  },
+  {
+    "recommendation_id": "coh-004",
+    "account_id": "555555555555",
+    "model_id": null,
+    "recommendation_type": "EndpointConsolidation",
+    "estimated_savings": "18.00",
+    "description": "Consolidate SageMaker GenAI endpoints — two endpoints serve similar traffic and can be merged",
+    "service": "AmazonSageMaker"
+  },
+  {
+    "recommendation_id": "coh-005",
+    "account_id": "222222222222",
+    "model_id": "stability.stable-diffusion-xl",
+    "recommendation_type": "RightsizeModel",
+    "estimated_savings": "8.00",
+    "description": "Reduce image resolution for non-production workloads to cut Stable Diffusion costs",
+    "service": "AmazonBedrock"
+  },
+  {
+    "recommendation_id": "coh-006",
+    "account_id": "111111111111",
+    "model_id": null,
+    "recommendation_type": "TerminateUnused",
+    "estimated_savings": "25.00",
+    "description": "Terminate unused EC2 instance running idle ML workload",
+    "service": "AmazonEC2"
+  }
+]
