@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
 
+from axonllm_ledger import __version__
 from axonllm_ledger.quick_dashboard import (
     QuickAssetBundleExportConfig,
     QuickDashboardProvisioner,
@@ -72,8 +73,7 @@ def main() -> int:
             f"dashboard/{args.dashboard_id}"
         )
         job_id = args.job_id or (
-            "axonllm-ledger-"
-            + datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+            "axonllm-ledger-" + datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
         )
         config = QuickAssetBundleExportConfig(
             aws_account_id=account_id,
@@ -89,19 +89,15 @@ def main() -> int:
         provisioner.start_export(config)
         status = provisioner.wait_for_export(config)
         if not status.succeeded:
-            raise RuntimeError(
-                f"asset-bundle export failed: {list(status.errors)}"
-            )
+            raise RuntimeError(f"asset-bundle export failed: {list(status.errors)}")
         if not status.download_url:
-            raise RuntimeError(
-                "asset-bundle export succeeded without a download URL"
-            )
+            raise RuntimeError("asset-bundle export succeeded without a download URL")
 
         output_path = Path(args.output)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         request = Request(
             status.download_url,
-            headers={"User-Agent": "axonllm-ledger/0.1.0"},
+            headers={"User-Agent": f"axonllm-ledger/{__version__}"},
         )
         with urlopen(request, timeout=90) as response:
             output_path.write_bytes(response.read())
