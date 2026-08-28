@@ -244,6 +244,7 @@ class _FakeQuick:
     def __init__(self) -> None:
         self.created_data_sources: list[str] = []
         self.created_data_sets: list[str] = []
+        self.created_ingestions: list[dict[str, Any]] = []
         self.dashboard_describe_calls = 0
 
     def describe_data_source(self, **kwargs: Any) -> dict[str, Any]:
@@ -287,6 +288,10 @@ class _FakeQuick:
 
     def describe_ingestion(self, **kwargs: Any) -> dict[str, Any]:
         return {"Ingestion": {"IngestionStatus": "COMPLETED"}}
+
+    def create_ingestion(self, **kwargs: Any) -> dict[str, Any]:
+        self.created_ingestions.append(kwargs)
+        return {"IngestionId": kwargs["IngestionId"]}
 
     def describe_dashboard(self, **kwargs: Any) -> dict[str, Any]:
         self.dashboard_describe_calls += 1
@@ -340,3 +345,18 @@ def test_deploys_all_resources_with_fake_clients() -> None:
     assert result.dashboard_url.endswith("/sn/dashboards/axonllm-ledger")
     assert result.role_arn == _config().quick_role_arn
     assert s3.bucket_policy is not None
+
+
+def test_refreshes_spice_without_recreating_dashboard_resources() -> None:
+    s3 = _FakeS3()
+    quick = _FakeQuick()
+    deployer = QuickDashboardDeployer(s3, quick, sleep=lambda _: None)
+
+    result = deployer.refresh_data(_tables(), _config())
+
+    assert len(s3.objects) == 8
+    assert len(quick.created_ingestions) == 4
+    assert quick.created_data_sources == []
+    assert quick.created_data_sets == []
+    assert quick.dashboard_describe_calls == 0
+    assert set(result.ingestion_ids) == set(DATASET_IDENTIFIERS)

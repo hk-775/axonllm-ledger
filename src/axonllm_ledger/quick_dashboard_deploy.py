@@ -7,9 +7,10 @@ import io
 import json
 import re
 import time
+import uuid
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Protocol, runtime_checkable
 
 from axonllm_ledger.quick_dashboard_definition import (
@@ -185,6 +186,10 @@ class QuickDeploymentClient(Protocol):
         """Describe a SPICE ingestion."""
         ...
 
+    def create_ingestion(self, **kwargs: Any) -> dict[str, Any]:
+        """Start a SPICE refresh."""
+        ...
+
     def describe_dashboard(self, **kwargs: Any) -> dict[str, Any]:
         """Describe the dashboard."""
         ...
@@ -258,6 +263,14 @@ class QuickDashboardDeploymentResult:
     data_source_arns: Mapping[str, str]
     data_set_arns: Mapping[str, str]
     dashboard_url: str
+
+
+@dataclass(frozen=True)
+class QuickDashboardRefreshResult:
+    """SPICE ingestions started by a data-only dashboard refresh."""
+
+    bucket_name: str
+    ingestion_ids: Mapping[str, str]
 
 
 class QuickDashboardDeployer:
@@ -353,6 +366,45 @@ class QuickDashboardDeployer:
                 f"https://{config.region_name}.quicksight.aws.amazon.com/"
                 f"sn/dashboards/{config.dashboard_id}"
             ),
+        )
+
+    def refresh_data(
+        self,
+        tables: Mapping[str, Sequence[Mapping[str, Any]]],
+        config: QuickDashboardDeploymentConfig,
+    ) -> QuickDashboardRefreshResult:
+        """Upload table snapshots and refresh existing SPICE data sets.
+
+        This path intentionally leaves data sources, data-set definitions, and
+        dashboard versions unchanged, making it suitable for a recurring job
+        after the initial deployment.
+        """
+        validate_quick_tables(tables)
+        self._ensure_bucket(config)
+        self._ensure_bucket_policy(config)
+        for table_name in DATASET_IDENTIFIERS:
+            self._upload_table(table_name, tables[table_name], config)
+
+        ingestion_ids: dict[str, str] = {}
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+        for table_name in DATASET_IDENTIFIERS:
+            data_set_id = _data_set_id(table_name)
+            requested_id = (
+                f"ledger-{timestamp}-{table_name.replace('_', '-')[:32]}-"
+                f"{uuid.uuid4().hex[:8]}"
+            )
+            response = self._quick.create_ingestion(
+                AwsAccountId=config.aws_account_id,
+                DataSetId=data_set_id,
+                IngestionId=requested_id,
+            )
+            ingestion_id = response.get("IngestionId", requested_id)
+            self._wait_for_ingestion(data_set_id, ingestion_id, config)
+            ingestion_ids[table_name] = ingestion_id
+
+        return QuickDashboardRefreshResult(
+            bucket_name=config.bucket_name,
+            ingestion_ids=dict(ingestion_ids),
         )
 
     def _ensure_bucket(self, config: QuickDashboardDeploymentConfig) -> None:

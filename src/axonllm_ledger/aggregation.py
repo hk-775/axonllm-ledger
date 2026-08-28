@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 from typing import Dict, List, Optional
 
@@ -528,7 +528,7 @@ class BatchAggregationScheduler:
         Returns a list of CostAggregation records and stores them internally.
         """
         results: List[CostAggregation] = []
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         dimension_methods = [
             (DimensionType.USER, self._engine.aggregate_by_user),

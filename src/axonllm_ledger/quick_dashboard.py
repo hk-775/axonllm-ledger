@@ -16,7 +16,7 @@ from typing import Any, Protocol, runtime_checkable
 
 _ACCOUNT_ID_PATTERN = re.compile(r"^[0-9]{12}$")
 _JOB_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{1,512}$")
-_TERMINAL_STATUSES = frozenset(
+_IMPORT_TERMINAL_STATUSES = frozenset(
     {
         "SUCCESSFUL",
         "FAILED",
@@ -24,6 +24,7 @@ _TERMINAL_STATUSES = frozenset(
         "FAILED_ROLLBACK_ERROR",
     }
 )
+_EXPORT_TERMINAL_STATUSES = frozenset({"SUCCESSFUL", "FAILED"})
 
 
 @runtime_checkable
@@ -36,6 +37,14 @@ class QuickSightClient(Protocol):
 
     def describe_asset_bundle_import_job(self, **kwargs: Any) -> dict[str, Any]:
         """Describe an asset-bundle import job."""
+        ...
+
+    def start_asset_bundle_export_job(self, **kwargs: Any) -> dict[str, Any]:
+        """Start an asset-bundle export job."""
+        ...
+
+    def describe_asset_bundle_export_job(self, **kwargs: Any) -> dict[str, Any]:
+        """Describe an asset-bundle export job."""
         ...
 
 
@@ -86,11 +95,80 @@ class QuickAssetBundleImportStatus:
     @property
     def is_terminal(self) -> bool:
         """Return whether the import has reached a terminal state."""
-        return self.status in _TERMINAL_STATUSES
+        return self.status in _IMPORT_TERMINAL_STATUSES
 
     @property
     def succeeded(self) -> bool:
         """Return whether the import completed successfully."""
+        return self.status == "SUCCESSFUL"
+
+
+@dataclass(frozen=True)
+class QuickAssetBundleExportConfig:
+    """Settings for a portable Quick asset-bundle export."""
+
+    aws_account_id: str
+    job_id: str
+    resource_arns: tuple[str, ...]
+    export_format: str = "QUICKSIGHT_JSON"
+    include_all_dependencies: bool = True
+    include_permissions: bool = False
+    include_tags: bool = True
+    strict_validation: bool = True
+
+    def __post_init__(self) -> None:
+        if not _ACCOUNT_ID_PATTERN.fullmatch(self.aws_account_id):
+            raise ValueError("aws_account_id must be a 12-digit AWS account ID")
+        if not _JOB_ID_PATTERN.fullmatch(self.job_id):
+            raise ValueError(
+                "job_id must contain only letters, numbers, underscores, or hyphens"
+            )
+        if not 1 <= len(self.resource_arns) <= 100:
+            raise ValueError("resource_arns must contain between 1 and 100 ARNs")
+        if not all(
+            arn.startswith(("arn:aws:quicksight:", "arn:aws-us-gov:quicksight:"))
+            for arn in self.resource_arns
+        ):
+            raise ValueError("resource_arns must contain Amazon Quick Sight ARNs")
+        if self.export_format not in {
+            "QUICKSIGHT_JSON",
+            "CLOUDFORMATION_JSON",
+        }:
+            raise ValueError(
+                "export_format must be QUICKSIGHT_JSON or CLOUDFORMATION_JSON"
+            )
+
+
+@dataclass(frozen=True)
+class QuickAssetBundleExportStarted:
+    """Response returned when Quick accepts an asset-bundle export."""
+
+    arn: str
+    job_id: str
+    request_id: str | None
+    http_status: int | None
+
+
+@dataclass(frozen=True)
+class QuickAssetBundleExportStatus:
+    """Normalized status for a Quick asset-bundle export."""
+
+    job_id: str
+    status: str
+    arn: str | None = None
+    download_url: str | None = None
+    resource_arns: tuple[str, ...] = ()
+    errors: tuple[dict[str, Any], ...] = ()
+    warnings: tuple[dict[str, Any], ...] = ()
+
+    @property
+    def is_terminal(self) -> bool:
+        """Return whether the export has reached a terminal state."""
+        return self.status in _EXPORT_TERMINAL_STATUSES
+
+    @property
+    def succeeded(self) -> bool:
+        """Return whether the export completed successfully."""
         return self.status == "SUCCESSFUL"
 
 
@@ -202,6 +280,74 @@ class QuickDashboardProvisioner:
 
         raise TimeoutError(
             f"Quick asset-bundle import {config.job_id} did not finish "
+            f"after {max_attempts} status checks"
+        )
+
+    def start_export(
+        self,
+        config: QuickAssetBundleExportConfig,
+    ) -> QuickAssetBundleExportStarted:
+        """Start a portable dashboard asset-bundle export."""
+        response = self._client.start_asset_bundle_export_job(
+            AwsAccountId=config.aws_account_id,
+            AssetBundleExportJobId=config.job_id,
+            ResourceArns=list(config.resource_arns),
+            IncludeAllDependencies=config.include_all_dependencies,
+            ExportFormat=config.export_format,
+            IncludePermissions=config.include_permissions,
+            IncludeTags=config.include_tags,
+            ValidationStrategy={
+                "StrictModeForAllResources": config.strict_validation
+            },
+        )
+        return QuickAssetBundleExportStarted(
+            arn=response.get("Arn", ""),
+            job_id=response.get("AssetBundleExportJobId", config.job_id),
+            request_id=response.get("RequestId"),
+            http_status=response.get("Status"),
+        )
+
+    def describe_export(
+        self,
+        config: QuickAssetBundleExportConfig,
+    ) -> QuickAssetBundleExportStatus:
+        """Return the current state of an asset-bundle export."""
+        response = self._client.describe_asset_bundle_export_job(
+            AwsAccountId=config.aws_account_id,
+            AssetBundleExportJobId=config.job_id,
+        )
+        return QuickAssetBundleExportStatus(
+            job_id=response.get("AssetBundleExportJobId", config.job_id),
+            status=response.get("JobStatus", ""),
+            arn=response.get("Arn"),
+            download_url=response.get("DownloadUrl"),
+            resource_arns=tuple(response.get("ResourceArns", [])),
+            errors=tuple(dict(item) for item in response.get("Errors", [])),
+            warnings=tuple(dict(item) for item in response.get("Warnings", [])),
+        )
+
+    def wait_for_export(
+        self,
+        config: QuickAssetBundleExportConfig,
+        *,
+        delay_seconds: float = 5,
+        max_attempts: int = 60,
+    ) -> QuickAssetBundleExportStatus:
+        """Poll until the export reaches a terminal state."""
+        if delay_seconds < 0:
+            raise ValueError("delay_seconds must be non-negative")
+        if max_attempts < 1:
+            raise ValueError("max_attempts must be at least 1")
+
+        for attempt in range(max_attempts):
+            status = self.describe_export(config)
+            if status.is_terminal:
+                return status
+            if attempt + 1 < max_attempts:
+                self._sleep(delay_seconds)
+
+        raise TimeoutError(
+            f"Quick asset-bundle export {config.job_id} did not finish "
             f"after {max_attempts} status checks"
         )
 

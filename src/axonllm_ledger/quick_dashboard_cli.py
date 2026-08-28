@@ -48,6 +48,14 @@ def main() -> int:
     )
     parser.add_argument("--dashboard-id", default="axonllm-ledger")
     parser.add_argument("--dashboard-name", default="AxonLLM Ledger")
+    parser.add_argument(
+        "--refresh-only",
+        action="store_true",
+        help=(
+            "Upload new table snapshots and refresh existing SPICE data sets "
+            "without creating a dashboard version"
+        ),
+    )
     args = parser.parse_args()
 
     try:
@@ -101,7 +109,10 @@ def main() -> int:
             region_name=args.region,
             profile_name=args.profile,
         )
-        result = deployer.deploy(tables, config)
+        if args.refresh_only:
+            result = deployer.refresh_data(tables, config)
+        else:
+            result = deployer.deploy(tables, config)
         print(json.dumps(asdict(result), indent=2, sort_keys=True))
         return 0
     except (BotoCoreError, ClientError, OSError, ValueError, RuntimeError) as exc:

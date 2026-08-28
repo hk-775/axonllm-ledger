@@ -26,10 +26,17 @@ dependencies = []
 
 [project.scripts]
 axonllm-ledger-dashboard = "axonllm_ledger.quick_dashboard_cli:main"
+axonllm-ledger-dashboard-export = "axonllm_ledger.quick_asset_bundle_cli:main"
 
 [project.optional-dependencies]
+aws = [
+    "boto3>=1.35.99",
+]
 quick = [
     "boto3>=1.35.99",
+]
+parquet = [
+    "pyarrow>=18.0.0",
 ]
 dev = [
     "boto3>=1.35.99",

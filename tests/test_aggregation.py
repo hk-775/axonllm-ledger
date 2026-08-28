@@ -1,6 +1,6 @@
 """Unit tests for the Aggregation Engine (per-user cost aggregation)."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 
 from axonllm_ledger.aggregation import (
@@ -768,6 +768,7 @@ class TestBatchAggregationSingleTimeRange:
             assert r.timeRangeEnd == TIME_RANGE.end
             assert r.aggregationId  # non-empty UUID
             assert r.computedAt is not None
+            assert r.computedAt.tzinfo is timezone.utc
 
     def test_dimension_values_are_correct(self):
         hierarchy = {

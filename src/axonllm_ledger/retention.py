@@ -6,7 +6,7 @@ as required by Requirement 9.4.
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Tuple
 
 from axonllm_ledger.models import AccessRecord
@@ -30,13 +30,13 @@ class RetentionPolicy:
 
         Args:
             record: The AccessRecord to check.
-            as_of: Reference datetime. Defaults to utcnow().
+            as_of: Reference datetime. Defaults to the current UTC time.
 
         Returns:
             True if the record's timestamp is older than the retention period.
         """
         if as_of is None:
-            as_of = datetime.utcnow()
+            as_of = _current_time_matching(record.timestamp)
         return (as_of - record.timestamp) > self.retention_period
 
     def apply(
@@ -48,13 +48,15 @@ class RetentionPolicy:
 
         Args:
             records: List of AccessRecords to evaluate.
-            as_of: Reference datetime. Defaults to utcnow().
+            as_of: Reference datetime. Defaults to the current UTC time.
 
         Returns:
             A tuple of (retained, expired) record lists.
         """
         if as_of is None:
-            as_of = datetime.utcnow()
+            as_of = datetime.now(timezone.utc)
+            if records and records[0].timestamp.tzinfo is None:
+                as_of = as_of.replace(tzinfo=None)
 
         retained: List[AccessRecord] = []
         expired: List[AccessRecord] = []
@@ -66,3 +68,11 @@ class RetentionPolicy:
                 retained.append(record)
 
         return retained, expired
+
+
+def _current_time_matching(reference: datetime) -> datetime:
+    """Return current UTC time with awareness matching ``reference``."""
+    now = datetime.now(timezone.utc)
+    if reference.tzinfo is None:
+        return now.replace(tzinfo=None)
+    return now

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 from enum import Enum
 from typing import Optional
@@ -119,7 +119,9 @@ class AccountHierarchy:
     organizationalUnitName: str
     parentOUId: str
     tags: dict[str, str] = field(default_factory=dict)
-    ingestedAt: datetime = field(default_factory=datetime.utcnow)
+    ingestedAt: datetime = field(
+        default_factory=lambda: datetime.now(timezone.utc)
+    )
 
 
 @dataclass
