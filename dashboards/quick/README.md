@@ -6,6 +6,25 @@ definition directly through the Quick Sight APIs. After review, the deployed
 dashboard can also be exported as a `.qs` asset bundle for immutable
 cross-account promotion.
 
+## Interactive sample
+
+The
+[GitHub Pages dashboard](https://hk-775.github.io/axonllm-ledger/)
+is a static, interactive preview of the same six-sheet information
+architecture. It is generated entirely from the synthetic files under
+`sample_data/`; it does not call AWS APIs or contain credentials.
+
+To preview it locally:
+
+```bash
+python scripts/build_pages_data.py
+python -m http.server 8000
+```
+
+Then open `http://localhost:8000/site/`. The committed dashboard payload is
+regenerated and checked in CI so it cannot silently drift from the canonical
+sample inputs.
+
 ## Dashboard sheets
 
 ### 1. Executive overview
