@@ -7,14 +7,15 @@ account-, and organizational-unit-level cost views. It complements AxonLLM's
 real-time routing and budget controls with billed-cost reconciliation,
 optimization data, and dashboard-ready analytics.
 
-The project is currently an alpha. Its existing calculation and ingestion
-behavior is covered by unit and property-based tests, while production storage,
-CUR 2.0 normalization, and a distributable Amazon Quick asset bundle remain
-release milestones.
+The project is currently in Beta. It includes production S3 billing-export
+ingestion, Legacy CUR/CUR 2.0/FOCUS normalization, cost reconciliation,
+dashboard deployment and refresh, and portable Amazon Quick asset-bundle
+export. Durable distributed persistence remains a post-Beta hardening item.
 
 ## What Ledger does
 
-- Parses Legacy CUR-shaped line items for Amazon Bedrock and Amazon SageMaker.
+- Reads CSV, JSON, JSON Lines, gzip, and optional Parquet exports from S3.
+- Normalizes Legacy CUR, CUR 2.0, and FOCUS billing records.
 - Deduplicates redelivered or overlapping billing records.
 - Attributes cost and usage by user, AWS account, organizational unit, and model.
 - Tracks which users accessed which models.
@@ -22,7 +23,7 @@ release milestones.
 - Ingests AWS Organizations hierarchy and Cost Optimization Hub recommendations.
 - Validates cross-dimension consistency and detects ingestion gaps.
 - Produces a stable analytics package for Amazon Quick, Looker, or another BI target.
-- Imports and monitors Amazon Quick dashboards through the Quick Sight asset-bundle API.
+- Deploys, refreshes, exports, imports, and monitors Amazon Quick dashboards.
 
 ## AxonLLM family boundary
 
@@ -38,22 +39,25 @@ and where can we optimize?"
 ## Data flow
 
 ```text
-Legacy CUR / normalized CID exports
-                |
-                v
-       Parse and deduplicate
-                |
-                v
-   Aggregate and reconcile spend
-                |
-                v
-      Ledger analytics package
-          |              |
-          v              v
- Amazon Quick tables   Optional BI target
-          |
-          v
- Versioned Quick asset bundle
+Legacy CUR / CUR 2.0 / FOCUS exports
+                  |
+                  v
+        S3 ingestion adapter
+                  |
+                  v
+       Normalize and deduplicate
+                  |
+                  v
+     Aggregate and reconcile spend
+                  |
+                  v
+        Ledger analytics package
+            |              |
+            v              v
+   Amazon Quick tables   Optional BI target
+            |
+            v
+   Versioned Quick asset bundle
 ```
 
 ## Install for development
@@ -142,21 +146,24 @@ Use `--dataset-json` to deploy a production Quick table export instead of the
 sample file. See [the Quick dashboard guide](dashboards/quick/README.md) for
 the resource model, sheet inventory, and optional asset-bundle export workflow.
 
-## Current data-format boundary
+## Supported billing formats
 
-The parser currently expects Legacy CUR-style field names such as
-`product/servicecode`, `lineItem/UsageAccountId`, and
-`lineItem/UnblendedCost`. CUR 2.0 and FOCUS use different schemas and require a
-normalization layer before ingestion. Supporting those formats directly is a
-planned milestone.
+The S3 adapter reads CSV, JSON, JSON Lines, gzip-compressed files, and optional
+Parquet files. The normalization layer maps Legacy CUR, CUR 2.0, and FOCUS
+fields into Ledger's stable ingestion contract before parsing and
+deduplication. Because billing schemas can be customized, adopters should
+validate their export columns with representative data before production use.
 
 ## Current implementation limits
 
 - The core pipeline uses in-memory collections; production persistence is not implemented.
-- S3 listing and object-loading hooks are stubs intended for an AWS adapter.
-- The repository creates the complete Quick dashboard directly through the
-  API. A `.qs` asset bundle can be exported after review for immutable
-  cross-account promotion.
+- The S3 adapter reads one export object into memory at a time; very large
+  exports should be partitioned before ingestion.
+- User-level attribution requires identity fields in billing data or
+  complementary AxonLLM metadata; Ledger cannot infer identity that the source
+  does not provide.
+- Dashboard sharing, embedding, row-level security, and promotion approval
+  remain adopter-controlled.
 - Looker remains possible through the generic `DeliveryTarget` protocol, but
   Amazon Quick is the primary dashboard target.
 

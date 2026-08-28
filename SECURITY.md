@@ -2,9 +2,8 @@
 
 ## Reporting a vulnerability
 
-Do not open a public issue for a suspected vulnerability. Once this repository
-is public, use GitHub private vulnerability reporting from the repository's
-Security tab.
+Do not open a public issue for a suspected vulnerability. Use GitHub private
+vulnerability reporting from the repository's Security tab.
 
 Include the affected component, reproduction steps, potential impact, and any
 suggested mitigation.
@@ -21,4 +20,7 @@ suggested mitigation.
 
 ## Supported versions
 
-Until the first public release, only the latest commit on `main` is supported.
+| Version | Supported |
+|---|---|
+| `0.1.0b1` | Yes |
+| Earlier snapshots | No |
