@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "axonllm-ledger"
+version = "0.1.0"
+description = "Open-source cost intelligence for Amazon Bedrock and AWS AI workloads"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT-0"
+license-files = ["LICENSE"]
+authors = [{ name = "AxonLLM Ledger contributors" }]
+keywords = ["amazon-bedrock", "aws", "finops", "cost-management", "generative-ai"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Office/Business :: Financial",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+quick = [
+    "boto3>=1.35.99",
+]
+dev = [
+    "boto3>=1.35.99",
+    "build>=1.2.2",
+    "pytest>=8.0",
+    "hypothesis>=6.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["axonllm_ledger*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

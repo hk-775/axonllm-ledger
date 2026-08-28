@@ -1,0 +1,42 @@
+[
+  {
+    "account_id": "111111111111",
+    "account_name": "ML-Team-Prod",
+    "ou_id": "ou-engineering",
+    "ou_name": "Engineering",
+    "parent_ou_id": "ou-root",
+    "tags": {"team": "ml", "environment": "production", "cost-center": "CC-1001"}
+  },
+  {
+    "account_id": "222222222222",
+    "account_name": "DataScience-Dev",
+    "ou_id": "ou-engineering",
+    "ou_name": "Engineering",
+    "parent_ou_id": "ou-root",
+    "tags": {"team": "data-science", "environment": "development", "cost-center": "CC-1002"}
+  },
+  {
+    "account_id": "333333333333",
+    "account_name": "EU-Research-Lab",
+    "ou_id": "ou-research",
+    "ou_name": "Research",
+    "parent_ou_id": "ou-root",
+    "tags": {"team": "research", "environment": "production", "region": "eu-west-1"}
+  },
+  {
+    "account_id": "444444444444",
+    "account_name": "Platform-Eng",
+    "ou_id": "ou-platform",
+    "ou_name": "Platform",
+    "parent_ou_id": "ou-engineering",
+    "tags": {"team": "platform", "environment": "production", "cost-center": "CC-1003"}
+  },
+  {
+    "account_id": "555555555555",
+    "account_name": "APAC-GenAI-Team",
+    "ou_id": "ou-apac",
+    "ou_name": "APAC",
+    "parent_ou_id": "ou-root",
+    "tags": {"team": "apac-genai", "environment": "production", "region": "ap-southeast-1"}
+  }
+]

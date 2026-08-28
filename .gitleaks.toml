@@ -1,0 +1,8 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Python equality assertion misclassified as a generic API key"
+paths = ['''tests/test_models\.py''']
+regexTarget = "match"
+regexes = ['''rec1\.deduplication_key == rec2\.deduplication_key''']
