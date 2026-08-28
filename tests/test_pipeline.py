@@ -169,6 +169,44 @@ class TestCURIngestion:
         # Same line item should only be stored once
         assert len(pipeline.usage_records) == 1
 
+    def test_accepts_injected_cur_trigger(self):
+        notifier = LoggingAlertNotifier()
+        config = PipelineConfig(s3_bucket="bucket", s3_prefix="cur/")
+        trigger = type(
+            "FakeTrigger",
+            (),
+            {
+                "handle_s3_event": lambda self, event: IngestionResult(
+                    new_records=[],
+                    access_records=[],
+                    skipped_count=0,
+                    duplicate_count=0,
+                    log=IngestionLog(
+                        logId="log-1",
+                        source="CUR",
+                        s3Key="cur/export.csv",
+                        recordCount=0,
+                        skippedCount=0,
+                        duplicateCount=0,
+                        status=IngestionStatus.SUCCESS,
+                        startedAt=datetime.now(timezone.utc),
+                        completedAt=datetime.now(timezone.utc),
+                    ),
+                ),
+                "poll_for_new_exports": lambda self: [],
+            },
+        )()
+
+        pipeline = CostTrackingPipeline(
+            config=config,
+            notifier=notifier,
+            cur_trigger=trigger,
+        )
+
+        assert pipeline.run_cur_ingestion_event(_s3_event()).log.s3Key == (
+            "cur/export.csv"
+        )
+
 
 # ---------------------------------------------------------------------------
 # Tests: CID ingestion stores budgets/orgs/recommendations

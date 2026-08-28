@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 from typing import Optional
 
+from axonllm_ledger.cost_normalization import normalize_cost_row
 from axonllm_ledger.models import AccessRecord, IngestionLog, IngestionStatus, UsageRecord
 
 logger = logging.getLogger(__name__)
@@ -71,6 +72,8 @@ def parse_line_item(raw_item: dict) -> Optional[UsageRecord]:
       - lineItem/UsageAmount: token count / usage amount
       - lineItem/UnblendedCost: cost in USD
     """
+    raw_item = normalize_cost_row(raw_item)
+
     # --- Step 1: Filter by service code ---
     service_code = raw_item.get("product/servicecode", "")
     if service_code not in GENAI_SERVICE_CODES:
@@ -86,7 +89,9 @@ def parse_line_item(raw_item: dict) -> Optional[UsageRecord]:
     )
     account_id = raw_item.get("lineItem/UsageAccountId", "")
     resource_arn = raw_item.get("lineItem/ResourceId", "")
-    model_id = extract_model_id_from_arn(resource_arn) if resource_arn else ""
+    model_id = raw_item.get("axonllm/modelId", "") or (
+        extract_model_id_from_arn(resource_arn) if resource_arn else ""
+    )
     timestamp_str = raw_item.get("lineItem/UsageStartDate", "")
     cost_str = raw_item.get("lineItem/UnblendedCost", "")
 
@@ -164,9 +169,11 @@ def parse_line_item(raw_item: dict) -> Optional[UsageRecord]:
 
 def _parse_timestamp(value: str) -> datetime:
     """Parse an ISO-format timestamp string into a datetime."""
-    # CUR timestamps are typically ISO 8601, e.g. "2024-01-15T10:00:00Z"
-    cleaned = value.strip().rstrip("Z")
-    return datetime.fromisoformat(cleaned)
+    cleaned = str(value).strip().replace("Z", "+00:00")
+    parsed = datetime.fromisoformat(cleaned)
+    if parsed.tzinfo is not None:
+        return parsed.astimezone(timezone.utc).replace(tzinfo=None)
+    return parsed
 
 
 def _safe_int(value) -> int:

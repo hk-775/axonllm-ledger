@@ -1,6 +1,6 @@
 """Unit tests for AxonLLM Ledger data models."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 
 from axonllm_ledger.models import (
@@ -172,6 +172,7 @@ class TestAccountHierarchy:
             parentOUId="ou-root",
         )
         assert ah.tags == {}
+        assert ah.ingestedAt.tzinfo is timezone.utc
 
 
 class TestOptimizationRecommendation:

@@ -4,7 +4,7 @@ Validates Requirement 9.4: THE Ledger SHALL retain Access_Records
 for a minimum of 12 months.
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from axonllm_ledger.models import AccessRecord
 from axonllm_ledger.retention import RETENTION_PERIOD, RetentionPolicy
@@ -28,6 +28,16 @@ class TestRetentionPeriodConstant:
 
 
 class TestIsExpired:
+    def test_default_reference_time_supports_aware_timestamp(self):
+        record = _make_record(datetime.now(timezone.utc))
+        policy = RetentionPolicy()
+        assert policy.is_expired(record) is False
+
+    def test_default_reference_time_supports_legacy_naive_timestamp(self):
+        record = _make_record(datetime.now())
+        policy = RetentionPolicy()
+        assert policy.is_expired(record) is False
+
     def test_recent_record_not_expired(self):
         now = datetime(2024, 6, 15, 12, 0, 0)
         record = _make_record(now - timedelta(days=30))

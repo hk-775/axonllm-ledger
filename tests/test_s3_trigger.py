@@ -11,9 +11,13 @@ Tests cover:
 
 from __future__ import annotations
 
+import gzip
+import io
+import json
+
 from axonllm_ledger.cur_ingestion import DeduplicationStore
 from axonllm_ledger.models import IngestionStatus
-from axonllm_ledger.s3_trigger import CURIngestionTrigger
+from axonllm_ledger.s3_trigger import CURIngestionTrigger, parse_export_payload
 
 import pytest
 
@@ -281,3 +285,150 @@ class TestConfiguration:
         store = DeduplicationStore()
         trigger = CURIngestionTrigger("bucket", "prefix/", store)
         assert trigger.processed_keys == frozenset()
+
+
+class _FakePaginator:
+    def __init__(self, pages):
+        self.pages = pages
+        self.requests = []
+
+    def paginate(self, **kwargs):
+        self.requests.append(kwargs)
+        return iter(self.pages)
+
+
+class _TrackedBody(io.BytesIO):
+    was_closed = False
+
+    def close(self):
+        self.was_closed = True
+        super().close()
+
+
+class _FakeS3Client:
+    def __init__(self, *, pages=None, objects=None):
+        self.paginator = _FakePaginator(pages or [])
+        self.objects = objects or {}
+        self.get_requests = []
+        self.last_body = None
+
+    def get_paginator(self, operation_name):
+        assert operation_name == "list_objects_v2"
+        return self.paginator
+
+    def get_object(self, **kwargs):
+        self.get_requests.append(kwargs)
+        payload, metadata = self.objects[kwargs["Key"]]
+        self.last_body = _TrackedBody(payload)
+        return {"Body": self.last_body, **metadata}
+
+
+class TestProductionS3Adapter:
+    def test_lists_supported_objects_across_pages(self):
+        client = _FakeS3Client(
+            pages=[
+                {
+                    "Contents": [
+                        {"Key": "cur/a.csv.gz", "Size": 10},
+                        {"Key": "cur/manifest.json", "Size": 10},
+                    ]
+                },
+                {
+                    "Contents": [
+                        {"Key": "cur/b.parquet", "Size": 20},
+                        {"Key": "cur/empty.csv", "Size": 0},
+                    ]
+                },
+            ]
+        )
+        trigger = CURIngestionTrigger(
+            "billing-bucket",
+            "cur/",
+            DeduplicationStore(),
+            s3_client=client,
+        )
+
+        keys = trigger._list_new_exports()
+
+        assert keys == ["cur/a.csv.gz", "cur/b.parquet"]
+        assert client.paginator.requests == [
+            {"Bucket": "billing-bucket", "Prefix": "cur/"}
+        ]
+
+    def test_reads_csv_object_and_closes_stream(self):
+        payload = (
+            "product/servicecode,identity/LineItemId\n"
+            "AmazonBedrock,line-1\n"
+        ).encode()
+        client = _FakeS3Client(objects={"cur/export.csv": (payload, {})})
+        trigger = CURIngestionTrigger(
+            "billing-bucket",
+            "cur/",
+            DeduplicationStore(),
+            s3_client=client,
+        )
+
+        rows = trigger._read_export("cur/export.csv")
+
+        assert rows == [
+            {
+                "product/servicecode": "AmazonBedrock",
+                "identity/LineItemId": "line-1",
+            }
+        ]
+        assert client.last_body.was_closed
+
+    def test_requires_configured_s3_client(self):
+        trigger = CURIngestionTrigger(
+            "billing-bucket",
+            "cur/",
+            DeduplicationStore(),
+        )
+
+        with pytest.raises(RuntimeError, match="S3 client is not configured"):
+            trigger._list_new_exports()
+
+    def test_decodes_s3_event_key(self):
+        event = _make_s3_event("cur%2F2026-08%2Fexport+one.csv")
+
+        assert CURIngestionTrigger._extract_s3_key(event) == (
+            "cur/2026-08/export one.csv"
+        )
+
+    def test_validates_event_bucket_when_enabled(self):
+        trigger = CURIngestionTrigger(
+            "expected-bucket",
+            "cur/",
+            DeduplicationStore(),
+            s3_client=_FakeS3Client(),
+            validate_event_bucket=True,
+        )
+
+        with pytest.raises(ValueError, match="does not match"):
+            trigger.handle_s3_event(_make_s3_event("cur/export.csv", "other-bucket"))
+
+
+class TestParseExportPayload:
+    def test_parses_gzipped_csv(self):
+        payload = gzip.compress(b"a,b\n1,2\n")
+
+        assert parse_export_payload("cur/data.csv.gz", payload) == [
+            {"a": "1", "b": "2"}
+        ]
+
+    def test_parses_json_record_wrapper(self):
+        payload = json.dumps({"records": [{"a": 1}]}).encode()
+
+        assert parse_export_payload("cur/data.json", payload) == [{"a": 1}]
+
+    def test_parses_json_lines(self):
+        payload = b'{"a": 1}\n{"a": 2}\n'
+
+        assert parse_export_payload("cur/data.jsonl", payload) == [
+            {"a": 1},
+            {"a": 2},
+        ]
+
+    def test_rejects_unknown_format(self):
+        with pytest.raises(ValueError, match="unsupported"):
+            parse_export_payload("cur/data.txt", b"data")

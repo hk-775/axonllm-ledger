@@ -72,6 +72,8 @@ class CostTrackingPipeline:
         config: PipelineConfig,
         notifier: AlertNotifier,
         delivery_target=None,
+        *,
+        cur_trigger: CURIngestionTrigger | None = None,
     ) -> None:
         self._config = config
         self._notifier = notifier
@@ -86,7 +88,7 @@ class CostTrackingPipeline:
 
         # Sub-components
         self._dedup_store = DeduplicationStore()
-        self._cur_trigger = CURIngestionTrigger(
+        self._cur_trigger = cur_trigger or CURIngestionTrigger(
             bucket=config.s3_bucket,
             prefix=config.s3_prefix,
             dedup_store=self._dedup_store,
@@ -97,6 +99,36 @@ class CostTrackingPipeline:
             self._export_service = ExportService(
                 target=delivery_target, notifier=notifier,
             )
+
+    @classmethod
+    def from_boto3(
+        cls,
+        config: PipelineConfig,
+        notifier: AlertNotifier,
+        delivery_target=None,
+        *,
+        region_name: str | None = None,
+        profile_name: str | None = None,
+    ) -> CostTrackingPipeline:
+        """Create a pipeline with a production S3 CUR ingestion adapter."""
+        if not config.s3_bucket:
+            raise ValueError("config.s3_bucket is required for AWS S3 ingestion")
+        dedup_store = DeduplicationStore()
+        trigger = CURIngestionTrigger.from_boto3(
+            bucket=config.s3_bucket,
+            prefix=config.s3_prefix,
+            dedup_store=dedup_store,
+            region_name=region_name,
+            profile_name=profile_name,
+        )
+        pipeline = cls(
+            config=config,
+            notifier=notifier,
+            delivery_target=delivery_target,
+            cur_trigger=trigger,
+        )
+        pipeline._dedup_store = dedup_store
+        return pipeline
 
     # -- accessors for stored data -----------------------------------------
 

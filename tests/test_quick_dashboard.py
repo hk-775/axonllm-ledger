@@ -7,6 +7,7 @@ from typing import Any
 import pytest
 
 from axonllm_ledger.quick_dashboard import (
+    QuickAssetBundleExportConfig,
     QuickAssetBundleImportConfig,
     QuickDashboardProvisioner,
 )
@@ -17,6 +18,9 @@ class _FakeQuickSightClient:
         self.start_requests: list[dict[str, Any]] = []
         self.describe_requests: list[dict[str, Any]] = []
         self._statuses = list(statuses or [])
+        self.export_start_requests: list[dict[str, Any]] = []
+        self.export_describe_requests: list[dict[str, Any]] = []
+        self._export_statuses: list[dict[str, Any]] = []
 
     def start_asset_bundle_import_job(self, **kwargs: Any) -> dict[str, Any]:
         self.start_requests.append(kwargs)
@@ -32,6 +36,21 @@ class _FakeQuickSightClient:
         if not self._statuses:
             raise AssertionError("No fake status response configured")
         return self._statuses.pop(0)
+
+    def start_asset_bundle_export_job(self, **kwargs: Any) -> dict[str, Any]:
+        self.export_start_requests.append(kwargs)
+        return {
+            "Arn": "arn:aws:quicksight:us-east-1:123456789012:asset-bundle-export-job/job-1",
+            "AssetBundleExportJobId": kwargs["AssetBundleExportJobId"],
+            "RequestId": "request-export-1",
+            "Status": 202,
+        }
+
+    def describe_asset_bundle_export_job(self, **kwargs: Any) -> dict[str, Any]:
+        self.export_describe_requests.append(kwargs)
+        if not self._export_statuses:
+            raise AssertionError("No fake export status response configured")
+        return self._export_statuses.pop(0)
 
 
 def _config(**overrides: Any) -> QuickAssetBundleImportConfig:
@@ -184,3 +203,67 @@ class TestDescribeAndWait:
             provisioner.wait_for_import(_config(), delay_seconds=-1)
         with pytest.raises(ValueError, match="at least 1"):
             provisioner.wait_for_import(_config(), max_attempts=0)
+
+
+def _export_config(**overrides: Any) -> QuickAssetBundleExportConfig:
+    values: dict[str, Any] = {
+        "aws_account_id": "123456789012",
+        "job_id": "axonllm-ledger-export-v1",
+        "resource_arns": (
+            "arn:aws:quicksight:us-east-1:123456789012:"
+            "dashboard/axonllm-ledger",
+        ),
+    }
+    values.update(overrides)
+    return QuickAssetBundleExportConfig(**values)
+
+
+class TestQuickAssetBundleExport:
+    def test_starts_export_with_dependencies_tags_and_strict_validation(self):
+        client = _FakeQuickSightClient()
+        provisioner = QuickDashboardProvisioner(client)
+
+        started = provisioner.start_export(_export_config())
+
+        assert started.http_status == 202
+        request = client.export_start_requests[0]
+        assert request["ExportFormat"] == "QUICKSIGHT_JSON"
+        assert request["IncludeAllDependencies"] is True
+        assert request["IncludePermissions"] is False
+        assert request["IncludeTags"] is True
+        assert request["ValidationStrategy"] == {
+            "StrictModeForAllResources": True
+        }
+
+    def test_waits_for_export_and_returns_download_url(self):
+        client = _FakeQuickSightClient()
+        client._export_statuses = [
+            {"JobStatus": "IN_PROGRESS"},
+            {
+                "JobStatus": "SUCCESSFUL",
+                "AssetBundleExportJobId": "axonllm-ledger-export-v1",
+                "DownloadUrl": "https://example.invalid/bundle.qs",
+                "ResourceArns": list(_export_config().resource_arns),
+            },
+        ]
+        delays: list[float] = []
+        provisioner = QuickDashboardProvisioner(client, sleep=delays.append)
+
+        status = provisioner.wait_for_export(
+            _export_config(),
+            delay_seconds=1,
+            max_attempts=2,
+        )
+
+        assert status.succeeded
+        assert status.download_url == "https://example.invalid/bundle.qs"
+        assert status.resource_arns == _export_config().resource_arns
+        assert delays == [1]
+
+    def test_rejects_empty_export_resource_list(self):
+        with pytest.raises(ValueError, match="between 1 and 100"):
+            _export_config(resource_arns=())
+
+    def test_rejects_unknown_export_format(self):
+        with pytest.raises(ValueError, match="export_format"):
+            _export_config(export_format="ZIP")

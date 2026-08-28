@@ -1,0 +1,139 @@
+<mxfile host="app.diagrams.net" modified="2026-08-28T18:30:00.000Z" agent="AxonLLM Ledger" version="28.0.6">
+  <diagram id="axonllm-ledger-architecture" name="Architecture">
+    <mxGraphModel dx="1500" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="canvas" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=none;movable=0;resizable=0;connectable=0;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1330" height="900" as="geometry"/>
+        </mxCell>
+        <mxCell id="title" value="AxonLLM Ledger — Beta Architecture" style="text;html=1;align=center;verticalAlign=middle;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="20" width="700" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="sources" value="AWS cost and identity sources" style="swimlane;startSize=30;rounded=1;fillColor=#f5f5f5;swimlaneFillColor=#ffffff;strokeColor=#666666;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="20" y="90" width="250" height="780" as="geometry"/>
+        </mxCell>
+        <mxCell id="cur" value="Legacy CUR&#xa;CUR 2.0 / FOCUS" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cost_and_usage_report;" vertex="1" parent="sources">
+          <mxGeometry x="25" y="60" width="78" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="billing_s3" value="Billing export bucket" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.bucket_with_objects;" vertex="1" parent="sources">
+          <mxGeometry x="145" y="60" width="75" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="budgets" value="AWS Budgets" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.budgets_2;" vertex="1" parent="sources">
+          <mxGeometry x="25" y="210" width="78" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="organizations" value="AWS Organizations" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account;" vertex="1" parent="sources">
+          <mxGeometry x="145" y="210" width="74" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="coh" value="Cost Optimization Hub" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cost_explorer;" vertex="1" parent="sources">
+          <mxGeometry x="25" y="365" width="78" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="axonllm" value="AxonLLM metadata&#xa;tenant • project • user&#xa;model • correlation ID" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="sources">
+          <mxGeometry x="120" y="365" width="110" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="scheduler" value="Scheduler / operator&#xa;S3 events + polling&#xa;refresh CLI" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eventbridge;" vertex="1" parent="sources">
+          <mxGeometry x="85" y="550" width="78" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="ledger" value="AxonLLM Ledger pipeline" style="swimlane;startSize=30;rounded=1;fillColor=#e8f4f8;swimlaneFillColor=#ffffff;strokeColor=#6c8ebf;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="310" y="90" width="520" height="780" as="geometry"/>
+        </mxCell>
+        <mxCell id="s3_adapter" value="S3 ingestion adapter&#xa;CSV • JSONL • Parquet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="ledger">
+          <mxGeometry x="35" y="60" width="180" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="normalize" value="Schema normalization&#xa;Legacy CUR • CUR 2.0 • FOCUS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="ledger">
+          <mxGeometry x="290" y="60" width="190" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="cid" value="CID ingestion&#xa;Budgets • Organizations • COH" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="ledger">
+          <mxGeometry x="35" y="205" width="180" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="dedup" value="Deduplicate + access records&#xa;current store: in-memory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="ledger">
+          <mxGeometry x="290" y="205" width="190" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="aggregate" value="Aggregate and reconcile&#xa;user • account • OU • model" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="ledger">
+          <mxGeometry x="160" y="355" width="200" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="integrity" value="Integrity checks&#xa;gaps • consistency • budgets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="ledger">
+          <mxGeometry x="35" y="520" width="180" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="contract" value="Stable analytics contract&#xa;4 dashboard tables" style="shape=mxgraph.flowchart.document;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="ledger">
+          <mxGeometry x="290" y="515" width="190" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="dashboard_layer" value="Amazon Quick data and presentation" style="swimlane;startSize=30;rounded=1;fillColor=#fff0e6;swimlaneFillColor=#ffffff;strokeColor=#d79b00;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="870" y="90" width="430" height="780" as="geometry"/>
+        </mxCell>
+        <mxCell id="dashboard_s3" value="Private dashboard bucket&#xa;versioned • encrypted&#xa;exact-prefix IAM policy" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.bucket_with_objects;" vertex="1" parent="dashboard_layer">
+          <mxGeometry x="50" y="65" width="75" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="spice" value="4 SPICE data sets&#xa;data-only recurring refresh" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="dashboard_layer">
+          <mxGeometry x="245" y="60" width="130" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="quick" value="Amazon Quick&#xa;6 sheets • 28 visuals" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.quicksight;" vertex="1" parent="dashboard_layer">
+          <mxGeometry x="175" y="245" width="78" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="bundle" value="Portable .qs bundle&#xa;dependencies included&#xa;cross-account promotion" style="shape=mxgraph.flowchart.document;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="dashboard_layer">
+          <mxGeometry x="145" y="430" width="150" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="users" value="FinOps • platform • engineering&#xa;budget owners • leadership" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="dashboard_layer">
+          <mxGeometry x="105" y="615" width="220" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="cur" target="billing_s3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="billing_s3" target="s3_adapter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="s3_adapter" target="normalize" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="normalize" target="dedup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="budgets" target="cid" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="organizations" target="cid" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="coh" target="cid" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="axonllm" target="aggregate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;endArrow=classic;" value="optional metadata">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="cid" target="aggregate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="dedup" target="aggregate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="aggregate" target="integrity" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="aggregate" target="contract" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="contract" target="dashboard_s3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="dashboard_s3" target="spice" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="spice" target="quick" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="quick" target="bundle" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="quick" target="users" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="scheduler" target="s3_adapter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;endArrow=classic;" value="event / poll">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="scheduler" target="spice" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;endArrow=classic;" value="refresh-only">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
