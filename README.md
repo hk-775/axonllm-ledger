@@ -60,6 +60,13 @@ Legacy CUR / CUR 2.0 / FOCUS exports
    Versioned Quick asset bundle
 ```
 
+## Architecture
+
+![AxonLLM Ledger Beta architecture](docs/architecture/axonllm-ledger.png)
+
+[Open the full-size PNG](docs/architecture/axonllm-ledger.png) or
+[edit the Draw.io source](docs/architecture/axonllm-ledger.drawio).
+
 ## Install for development
 
 Python 3.11 or later is required.
